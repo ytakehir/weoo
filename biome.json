@@ -1,0 +1,80 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "auth.ts",
+      "middleware.ts",
+      "next.config.ts",
+      "next.config.ts",
+      "vitest.config.ts",
+      "**/*.json",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.stories.tsx",
+      "src/**/*.js",
+      "src/**/*.json",
+      "src/**/*.css",
+      ".storybook/**/*.ts",
+      ".storybook/**/*.tsx",
+      ".storybook/**/*.json",
+      ".vscode/**/*.json",
+      "scripts/**/*.ts",
+      "scripts/**/*.js"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "useEditorconfig": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120,
+    "attributePosition": "auto",
+    "bracketSpacing": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useKeyWithClickEvents": "off"
+      },
+      "complexity": {
+        "noUselessFragments": "warn"
+      },
+      "correctness": {
+        "useHookAtTopLevel": "warn",
+        "noUnusedVariables": "warn"
+      },
+      "style": {
+        "useSelfClosingElements": "warn"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe",
+          "options": {}
+        }
+      }
+    },
+    "domains": {
+      "next": "recommended"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "single",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "none",
+      "semicolons": "asNeeded",
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "quoteStyle": "single",
+      "attributePosition": "auto",
+      "bracketSpacing": true
+    }
+  }
+}

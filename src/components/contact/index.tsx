@@ -1,0 +1,116 @@
+'use client'
+
+import { ArrowLeft, CheckCircle, Clock, Mail, MessageSquare } from 'lucide-react'
+import Link from 'next/link'
+import { FormProvider } from 'react-hook-form'
+import { ContactForm } from './contact-form'
+import { useContactForm } from './hooks'
+
+export function Contact() {
+  const { isSubmitted, setIsSubmitted, methods, onSubmit } = useContactForm()
+
+  if (isSubmitted) {
+    return (
+      <div className='flex min-h-screen items-center justify-center bg-background p-4'>
+        <div className='mx-auto max-w-md space-y-6 text-center'>
+          <div className='mx-auto flex h-16 w-16 animate-scale-in items-center justify-center rounded-2xl bg-gradient-to-br from-success/20 to-success/10'>
+            <CheckCircle className='h-8 w-8 text-success' />
+          </div>
+          <h1 className='font-bold text-2xl text-base-content'>送信完了！</h1>
+          <p className='text-base-content/70'>お問い合わせありがとうございます。通常1営業日以内にご返信いたします。</p>
+          <div className='flex flex-col justify-center gap-3 sm:flex-row'>
+            <Link href='/'>
+              <button type='button' className='btn btn-outline'>
+                <ArrowLeft className='mr-2 h-4 w-4' />
+                ホームへ戻る
+              </button>
+            </Link>
+            <button type='button' className='btn' onClick={() => setIsSubmitted(false)}>
+              もう一度送信する
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='container mx-auto max-w-6xl px-4 py-16'>
+      <div className='grid grid-cols-1 gap-12'>
+        {/* Contact Information */}
+        <div className='space-y-8'>
+          <div className='space-y-4'>
+            <h1 className='font-bold text-4xl text-base-content'>お問い合わせ</h1>
+            <p className='text-base-content/70 text-xl'>
+              お題や投稿方法、料金についてなど、ご不明な点があればお気軽にご連絡ください。
+            </p>
+          </div>
+
+          <div className='space-y-6'>
+            <div className='flex items-start space-x-4'>
+              <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/10'>
+                <Mail className='h-6 w-6 text-blue-500' />
+              </div>
+              <div>
+                <h3 className='mb-1 font-semibold text-base-content'>メールでのお問い合わせ</h3>
+                <p className='mb-2 text-base-content/70 text-sm'>
+                  アカウントや料金、操作方法などに関するご質問はこちら
+                </p>
+                <a
+                  href={`mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? ''}`}
+                  className='font-medium text-primary hover:underline'
+                >
+                  {process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? ''}
+                </a>
+              </div>
+            </div>
+
+            <div className='flex items-start space-x-4'>
+              <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/10'>
+                <MessageSquare className='h-6 w-6 text-green-500' />
+              </div>
+              <div>
+                <h3 className='mb-1 font-semibold text-base-content'>コラボ・取材のご相談</h3>
+                <p className='mb-2 text-base-content/70 text-sm'>イベント企画やコラボ、メディア取材のご相談はこちら</p>
+                <a
+                  href={`mailto:${process.env.NEXT_PUBLIC_SALES_EMAIL ?? ''}`}
+                  className='font-medium text-primary hover:underline'
+                >
+                  {process.env.NEXT_PUBLIC_SALES_EMAIL ?? ''}
+                </a>
+              </div>
+            </div>
+
+            <div className='flex items-start space-x-4'>
+              <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/10'>
+                <Clock className='h-6 w-6 text-purple-500' />
+              </div>
+              <div>
+                <h3 className='mb-1 font-semibold text-base-content'>返信までの目安</h3>
+                <p className='text-base-content/70 text-sm'>通常1営業日以内にご返信いたします。</p>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQ Link */}
+          <div className='rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6'>
+            <h3 className='mb-2 font-semibold text-base-content'>すぐに解決したい場合</h3>
+            <p className='mb-4 text-base-content/70 text-sm'>
+              よくある質問ページに、サービスの使い方や料金の詳細をまとめています。
+            </p>
+            <Link href='/faq'>
+              <button type='button' className='btn btn-outline btn-sm'>
+                よくある質問を見る
+              </button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Contact Form */}
+        <FormProvider {...methods}>
+          <ContactForm onSubmit={onSubmit} />
+        </FormProvider>
+      </div>
+    </div>
+  )
+}
