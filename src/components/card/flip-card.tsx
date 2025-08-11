@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { Zen_Maru_Gothic } from 'next/font/google'
 import Image from 'next/image'
 import { useState } from 'react'
+import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
 
 const zenmaru = Zen_Maru_Gothic({
@@ -10,11 +11,7 @@ const zenmaru = Zen_Maru_Gothic({
 })
 
 type Props = {
-  post: {
-    mission: React.ReactNode
-    url: string
-    date: Date
-  }
+  post: PostWithRelationsAndUrl
 }
 
 export function FlipCard({ post }: Props) {
@@ -34,7 +31,9 @@ export function FlipCard({ post }: Props) {
       >
         {/* Front */}
         <div className='card-body backface-hidden absolute flex size-full flex-col justify-between rounded-box bg-base-100 shadow-sm'>
-          <h2 className='card-title text-left font-semibold text-4xl/relaxed'>{post.mission}</h2>
+          <h2 className='card-title whitespace-pre-line text-left font-semibold text-4xl/relaxed'>
+            {post.mission.title.replace(/\\n/g, '\n')}
+          </h2>
           <button
             type='button'
             className='card-actions btn btn-link relative items-center justify-center text-info-content no-underline'
@@ -47,11 +46,16 @@ export function FlipCard({ post }: Props) {
         {/* Back */}
         <div className='card-body backface-hidden absolute inset-0 flex rotate-y-180 flex-col justify-between gap-0 p-0'>
           <div className='relative flex-1'>
-            <Image className='!size-full rounded-box object-cover shadow-sm' src={post.url} alt={post.url} fill />
+            <Image
+              className='!size-full rounded-box object-cover shadow-sm'
+              src={post.image_url_signed ?? '/no_image.png'}
+              alt={post.id}
+              fill
+            />
           </div>
 
           <div className='p-2'>
-            <p className='text-right text-base-content text-sm'>{format(post.date, 'yyyy/MM/dd')}</p>
+            <p className='text-right text-base-content text-sm'>{format(new Date(post.updated_at), 'yyyy/MM/dd')}</p>
           </div>
         </div>
       </div>

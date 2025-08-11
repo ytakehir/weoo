@@ -1,3 +1,4 @@
+import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -6,9 +7,10 @@ type Props = {
     title: string
     link: string
   }[]
+  isSubscription: boolean
 }
 
-export function Header({ nav }: Props) {
+export async function Header({ nav, isSubscription }: Props) {
   return (
     <header className='fixed top-0 right-0 left-0 z-50 w-full bg-base-100'>
       <div className='container mx-auto px-4 py-4 sm:px-6'>
@@ -34,11 +36,17 @@ export function Header({ nav }: Props) {
           </nav>
 
           <div className='flex items-center space-x-4'>
-            <Link href='/signin'>
-              <button type='button' className='btn btn-sm btn-link text-sm no-underline'>
-                Sign In
-              </button>
-            </Link>
+            {isSubscription ? (
+              <label htmlFor='side-bar' className='drawer-button'>
+                <Menu className='size-5' />
+              </label>
+            ) : (
+              <Link href='/signin'>
+                <button type='button' className='btn btn-sm btn-link text-sm no-underline'>
+                  Sign In
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

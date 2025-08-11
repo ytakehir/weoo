@@ -5,12 +5,8 @@ import Link from 'next/link'
 import { FaInstagram, FaTiktok } from 'react-icons/fa6'
 import { useMissionForm } from './hooks'
 
-type Props = {
-  onUnsubscribe: () => void
-}
-
-export function SideBar({ onUnsubscribe }: Props) {
-  const { isSubmitted, setIsSubmitted, methods, onSubmit } = useMissionForm()
+export function SideBar() {
+  const { isSubmitted, methods, onSubmit, handlePortal } = useMissionForm()
   const {
     register,
     handleSubmit,
@@ -18,13 +14,9 @@ export function SideBar({ onUnsubscribe }: Props) {
   } = methods
 
   return (
-    <div className='drawer drawer-end z-99999'>
+    <div className='drawer drawer-end z-1000'>
       <input id='side-bar' type='checkbox' className='drawer-toggle' />
-      <div className='drawer-content'>
-        <label htmlFor='side-bar' className='drawer-button btn btn-primary'>
-          Open drawer
-        </label>
-      </div>
+      <div className='drawer-content' />
       <div className='drawer-side'>
         <label htmlFor='side-bar' aria-label='close sidebar' className='drawer-overlay' />
         <ul className='menu h-full w-80 bg-base-100 p-4 text-base-content'>
@@ -32,9 +24,9 @@ export function SideBar({ onUnsubscribe }: Props) {
             <label htmlFor='side-bar' className='drawer-button btn btn-circle btn-sm border-none bg-base-100'>
               <PanelRightClose className='size-5' />
             </label>
-            <button type='button' className='btn btn-circle btn-sm border-none bg-base-100'>
+            <Link type='button' className='btn btn-circle btn-sm border-none bg-base-100' href='/mypage'>
               <User className='size-5' />
-            </button>
+            </Link>
           </div>
           <div className='mt-5 flex flex-1 flex-col justify-between'>
             <nav>
@@ -55,7 +47,7 @@ export function SideBar({ onUnsubscribe }: Props) {
                 </Link>
               </li>
               <li>
-                <button type='button' className='link link-error link-hover' onClick={onUnsubscribe}>
+                <button type='button' className='link link-error link-hover' onClick={() => handlePortal()}>
                   <div className='flex items-center gap-x-5'>
                     <LogOut className='size-4' />
                     Unsubscribe
@@ -76,6 +68,9 @@ export function SideBar({ onUnsubscribe }: Props) {
                     />
                     {errors.title && <p className='validator-hint hidden'>{errors.title.message}</p>}
                     <p className='label w-full justify-end'>50文字以内</p>
+                    {isSubmitted && (
+                      <p className='mt-2 text-center text-base-content text-sm'>投稿してくれてありがとう🙇🏻🙇🏻</p>
+                    )}
                   </fieldset>
                   <button type='submit' className='btn btn-neutral mt-4' disabled={isSubmitting}>
                     <Send className='mr-2 size-4' />

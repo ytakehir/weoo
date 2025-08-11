@@ -6,10 +6,9 @@ type Props = {
   isOpen: boolean
   onIsOpen: () => void
   onSubscribe: () => void
-  isPending: boolean
 }
 
-export function PlanModal({ isOpen, onIsOpen, onSubscribe, isPending }: Props) {
+export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
   return (
     <dialog id='plan-modal' className={cn('modal', isOpen && ' modal-open')}>
       <div className='modal-box relative flex flex-col overflow-visible p-0'>
@@ -39,12 +38,15 @@ export function PlanModal({ isOpen, onIsOpen, onSubscribe, isPending }: Props) {
             </li>
             <li>
               <Check className='me-2 inline-block size-4 text-success' />
+              <span className='text-base-content'>達成したお題をカレンダー形式で記録できる</span>
+            </li>
+            <li>
+              <Check className='me-2 inline-block size-4 text-success' />
               <span className='text-base-content'>みんなの写真が見れる</span>
             </li>
           </ul>
-          <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='期間限定 1週間無料✨'>
-            <button type='button' className='btn btn-primary w-full' onClick={onSubscribe} disabled={isPending}>
-              {isPending && <span className='loading loading-spinner' />}
+          <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='期間限定 2週間無料✨'>
+            <button type='button' className='btn btn-primary w-full' onClick={onSubscribe}>
               月額500円で始める
             </button>
           </div>

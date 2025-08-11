@@ -3,16 +3,8 @@
 1. run `cp .env.example .env`
 1. run `npm run prepare`
 
-### setting NextAuth.js
-1. npm run auth
-1. `AUTH_SECRET` copy `env.local` to `.env`
-
 ### setting Supabase
 1. create project & get secret key (`NEXT_PUBLIC_SUPABASE_URL` `NEXT_PUBLIC_SUPABASE_ANON_KEY` `SUPABASE_URL` `SUPABASE_SERVICE_ROLE_KEY`)
-
-### setting Prisma
-1. connect Supabase & get `DATABASE_URL` `DIRECT_URL`
-2. run `npm run prisma:migrate`
 
 ### setting Stripe
 1. create project & get secret key (`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` `STRIPE_SECRET_KEY`)

@@ -3,10 +3,24 @@
 import { Mail } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useAuthForm } from './hooks'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
+import { type EmailSignInState, emailSignIn } from './actions'
+import { OAuthButtons } from './oauth-buttons'
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <button type='submit' className='btn btn-primary mt-4' disabled={pending}>
+      {pending && <span className='loading loading-spinner loading-sm mr-2 text-primary-content' />}
+      Sign in
+    </button>
+  )
+}
 
 export function SignIn() {
-  const { register, handleSubmit, errors, isSubmitting, handleSignIn } = useAuthForm()
+  const initialState: EmailSignInState = { ok: false }
+  const [state, formAction] = useActionState(emailSignIn, initialState)
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-background p-4'>
@@ -14,7 +28,7 @@ export function SignIn() {
         {/* Header */}
         <div className='space-y-4 text-center'>
           <div className='flex justify-center'>
-            <Image src={'/logo.png'} alt='logo' width={64} height={64} />
+            <Image src='/logo.png' alt='logo' width={64} height={64} />
           </div>
           <div>
             <h1 className='font-bold text-3xl text-base-content'>weoo</h1>
@@ -23,11 +37,11 @@ export function SignIn() {
         </div>
 
         <div className='flex w-full flex-col items-center justify-center'>
-          {/* <OAuthButtons />
+          <OAuthButtons />
 
-          <div className='divider'>OR</div> */}
+          <div className='divider'>OR</div>
 
-          <form className='w-full' onSubmit={handleSubmit(handleSignIn)}>
+          <form className='w-full' action={formAction}>
             <fieldset className='fieldset w-full rounded-box border border-base-300 bg-base-200 p-4'>
               <label className='label' htmlFor='email'>
                 Email
@@ -35,20 +49,24 @@ export function SignIn() {
               <label className='input validator w-full' htmlFor='email'>
                 <Mail className='size-5 text-base-content/50' />
                 <input
+                  type='hidden'
+                  name='next'
+                  value={new URLSearchParams(window.location.search).get('next') ?? '/'}
+                />
+                <input
                   id='email'
+                  name='email'
                   type='email'
                   className='validator'
-                  placeholder='email@exapmle.com'
+                  placeholder='email@example.com'
                   required
-                  {...register('email')}
                 />
               </label>
-              {errors.email && <p className='validator-hint hidden'>{errors.email.message}</p>}
 
-              <button type='submit' className='btn btn-primary mt-4' disabled={isSubmitting}>
-                {isSubmitting && <span className='loading loading-spinner loading-sm mr-2 text-primary-content' />}
-                Sign in
-              </button>
+              {state.error && <p className='mt-2 text-error text-sm'>{state.error}</p>}
+              {state.message && <p className='mt-2 text-sm text-success'>{state.message}</p>}
+
+              <SubmitButton />
             </fieldset>
           </form>
 

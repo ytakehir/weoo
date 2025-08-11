@@ -1,43 +1,9 @@
-import { NextResponse } from 'next/server'
-import { getToken } from 'next-auth/jwt'
-import { prisma } from '@/lib/prisma/client'
+import type { NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
-import type { AuthNextRequest } from '@/types/next-auth'
-import { auth } from './auth'
 
-export default auth(async (req: AuthNextRequest) => {
-  const response = await updateSession(req)
-  const token = await getToken({ req })
-  const session = req.auth
-
-  const pathname = req.nextUrl.pathname
-  const publicPath = ['/', '/signin', '/verify', '/pricing', '/faq', '/privacy', '/terms']
-  const isPublic = publicPath.some((p) => pathname.startsWith(p))
-
-  if (!token) {
-    if (isPublic) {
-      return NextResponse.next()
-    }
-    return NextResponse.redirect(new URL('/signin', req.url))
-  }
-
-  const userId = token.sub
-
-  if (session && !isPublic) {
-    const subscription = await prisma.subscription.findFirst({
-      where: {
-        userId: userId,
-        status: 'active'
-      }
-    })
-
-    if (!subscription) {
-      return NextResponse.redirect(new URL('/pricing', req.url))
-    }
-  }
-
-  return response
-})
+export async function middleware(request: NextRequest) {
+  return await updateSession(request)
+}
 
 export const config = {
   matcher: [
@@ -48,9 +14,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-
-    // private path
-    '/onboarding'
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'
   ]
 }

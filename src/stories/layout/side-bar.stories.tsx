@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { fn } from 'storybook/internal/test'
 import { SideBar } from '@/components/layout/side-bar'
 
 const meta: Meta<typeof SideBar> = {
@@ -10,6 +9,6 @@ export default meta
 
 export const Default: StoryObj<typeof SideBar> = {
   render: () => {
-    return <SideBar onUnsubscribe={fn()} />
+    return <SideBar />
   }
 }

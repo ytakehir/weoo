@@ -1,15 +1,12 @@
+'use server'
+
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import type { Database } from '@/types/database'
-import { auth } from '../../../auth'
 
 export async function createClient() {
   const cookieStore = await cookies()
-  const session = await auth()
 
-  // Create a server's supabase client with newly configured cookie,
-  // which could be used to maintain user's session
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
     {
@@ -26,14 +23,7 @@ export async function createClient() {
             // user sessions.
           }
         }
-      },
-      global: {
-        headers: {
-          Authorization: `Bearer ${session?.supabaseAccessToken}`
-        }
       }
     }
   )
 }
-
-export const supabaseServer = createClient()

@@ -1,21 +1,22 @@
 import { NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe/server'
-import { supabaseServer } from '@/lib/supabase/server'
+import { getMyStripeCustomerId } from '@/lib/supabase/actions/profile'
+import { createClient } from '@/lib/supabase/server'
 
 export async function POST() {
   try {
-    const supabase = await supabaseServer
+    const supabase = await createClient()
     const {
       data: { user }
     } = await supabase.auth.getUser()
 
     if (!user) return NextResponse.redirect('/signin')
 
-    const { data } = await supabase.from('users').select('stripe_customer_id').eq('id', user.id).single()
+    const customerId = await getMyStripeCustomerId()
 
     const portalSession = await stripe.billingPortal.sessions.create({
-      customer: data?.stripe_customer_id,
-      return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing`
+      customer: customerId ?? '',
+      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`
     })
 
     return Response.json({ url: portalSession.url })

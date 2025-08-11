@@ -10,15 +10,7 @@ export default meta
 
 export const Default: StoryObj<typeof MissionCard> = {
   args: {
-    mission: (
-      <>
-        本屋に行って
-        <br />
-        お互いに本を
-        <br />
-        プレゼントしあう
-      </>
-    ),
+    mission: '本屋に行って\nお互いに本を\nプレゼントしあう',
     onClickMission: fn()
   },
   render: (args) => {

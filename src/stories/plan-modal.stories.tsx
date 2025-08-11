@@ -13,6 +13,6 @@ export const Default: StoryObj<typeof PlanModal> = {
   render: () => {
     const [isOpen, setIsOpen] = useState<boolean>(true)
 
-    return <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={fn()} isPending={false} />
+    return <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={fn()} />
   }
 }
