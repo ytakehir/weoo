@@ -57,10 +57,7 @@ export function Home({ mission, isSubscription }: Props) {
           data: { user },
           error: userErr
         } = await supabase.auth.getUser()
-        if (userErr || !user) {
-          console.error('[auth]', userErr)
-          return
-        }
+        if (userErr || !user) return
 
         const ext = file.name.split('.').pop() ?? 'webp'
         const now = new Date()
@@ -71,10 +68,7 @@ export function Home({ mission, isSubscription }: Props) {
 
         const { error: upErr } = await supabase.storage.from('posts').upload(objectPath, file, { upsert: false })
 
-        if (upErr) {
-          console.error('[storage.upload]', upErr)
-          return
-        }
+        if (upErr) return
 
         await createPost({
           userId: user.id,

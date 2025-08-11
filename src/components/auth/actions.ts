@@ -35,7 +35,6 @@ export async function emailSignIn(_prevState: EmailSignInState, formData: FormDa
     options: { emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}` }
   })
   if (error) {
-    console.error('[emailSignIn]', error)
     return { ok: false, error: 'メール送信に失敗しました。時間をおいて再度お試しください。' }
   }
 

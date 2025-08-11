@@ -122,7 +122,6 @@ export async function getTodayMissionUTC(): Promise<MissionRow | null> {
     .limit(1)
 
   if (error) {
-    console.error('[getTodayMissionUTC]', error)
     return null
   }
   return data?.[0] ?? null
@@ -141,40 +140,32 @@ export async function getOrPickTodayMission(): Promise<MissionRow | null> {
   const twoMonthsAgoISO = twoMonthsAgo.toISOString()
 
   // 未使用
-  const { data: unused, error: unusedErr } = await supabase.from('missions').select('*').is('used_at', null)
+  const { data: unused } = await supabase.from('missions').select('*').is('used_at', null)
 
-  if (unusedErr) {
-    console.error('[getOrPickTodayMission][unused]', unusedErr)
-  }
   if (unused && unused.length > 0) {
     const picked = unused[Math.floor(Math.random() * unused.length)]
     // 当日として更新（RLSで弾かれても UI は返す）
-    const { error: updErr } = await supabase
+    await supabase
       .from('missions')
       .update({ used_at: new Date().toISOString() })
       .eq('id', picked.id)
       .select()
       .single()
-    if (updErr) console.warn('[getOrPickTodayMission][update unused failed]', updErr)
     return picked
   }
 
   // 2ヶ月以上前
   const { data: old, error: oldErr } = await supabase.from('missions').select('*').lt('used_at', twoMonthsAgoISO)
 
-  if (oldErr) {
-    console.error('[getOrPickTodayMission][old]', oldErr)
-    return null
-  }
+  if (oldErr) return null
   if (old && old.length > 0) {
     const picked = old[Math.floor(Math.random() * old.length)]
-    const { error: updErr } = await supabase
+    await supabase
       .from('missions')
       .update({ used_at: new Date().toISOString() })
       .eq('id', picked.id)
       .select()
       .single()
-    if (updErr) console.warn('[getOrPickTodayMission][update old failed]', updErr)
     return picked
   }
 

@@ -8,8 +8,6 @@ export async function POST(req: NextRequest) {
     const origin = headersList.get('origin')
     const { priceId, customerId } = await req.json()
 
-    console.log(priceId, customerId)
-
     if (!priceId || !customerId) return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 })
 
     const session = await stripe.checkout.sessions.create({
