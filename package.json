@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "next build",
     "start": "next start",
     "generate-daisy-ui-themes": "node scripts/daisy-ui-themes.js",
     "storybook": "npm run generate-daisy-ui-themes && storybook dev -p 6006",

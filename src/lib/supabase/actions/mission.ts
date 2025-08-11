@@ -145,12 +145,7 @@ export async function getOrPickTodayMission(): Promise<MissionRow | null> {
   if (unused && unused.length > 0) {
     const picked = unused[Math.floor(Math.random() * unused.length)]
     // 当日として更新（RLSで弾かれても UI は返す）
-    await supabase
-      .from('missions')
-      .update({ used_at: new Date().toISOString() })
-      .eq('id', picked.id)
-      .select()
-      .single()
+    await supabase.from('missions').update({ used_at: new Date().toISOString() }).eq('id', picked.id).select().single()
     return picked
   }
 
@@ -160,12 +155,7 @@ export async function getOrPickTodayMission(): Promise<MissionRow | null> {
   if (oldErr) return null
   if (old && old.length > 0) {
     const picked = old[Math.floor(Math.random() * old.length)]
-    await supabase
-      .from('missions')
-      .update({ used_at: new Date().toISOString() })
-      .eq('id', picked.id)
-      .select()
-      .single()
+    await supabase.from('missions').update({ used_at: new Date().toISOString() }).eq('id', picked.id).select().single()
     return picked
   }
 
