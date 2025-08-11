@@ -19,6 +19,7 @@ import { cn } from '@/lib/tailwind'
 type Props = {
   initialMonth?: Date
   posts: PostWithRelationsAndUrl[]
+  onClick: (index: number) => void
 }
 
 function makeMonthMatrix(month: Date) {
@@ -27,8 +28,7 @@ function makeMonthMatrix(month: Date) {
   return eachDayOfInterval({ start, end })
 }
 
-export function Calendar({ initialMonth = new Date(), posts }: Props) {
-  // 1) posts を日別にまとめる
+export function Calendar({ initialMonth = new Date(), posts, onClick }: Props) {
   const postsByDay = useMemo(() => {
     const map = new Map<string, { thumbUrl: string | null; fullUrl?: string | null }[]>()
     for (const p of posts) {
@@ -50,14 +50,12 @@ export function Calendar({ initialMonth = new Date(), posts }: Props) {
     return startOfMonth(oldest)
   }, [posts, initialMonth])
 
-  // 3) 下: 今日 → 上: 過去
-  const [months, setMonths] = useState<Date[]>([initialMonth, addMonths(initialMonth, -1), addMonths(initialMonth, -2)])
+  const [months, setMonths] = useState<Date[]>([initialMonth])
 
   const scrollerRef = useRef<HTMLDivElement>(null)
   const topSentinelRef = useRef<HTMLDivElement>(null)
   const ioRef = useRef<IntersectionObserver | null>(null)
 
-  // 最下端からスタート
   useEffect(() => {
     const id = requestAnimationFrame(() => {
       if (scrollerRef.current) scrollerRef.current.scrollTop = scrollerRef.current.scrollHeight
@@ -65,7 +63,6 @@ export function Calendar({ initialMonth = new Date(), posts }: Props) {
     return () => cancelAnimationFrame(id)
   }, [])
 
-  // 上端にきたら1ヶ月前を追加。ただし最古月を超えない
   useEffect(() => {
     ioRef.current?.disconnect()
     ioRef.current = new IntersectionObserver(
@@ -74,7 +71,6 @@ export function Calendar({ initialMonth = new Date(), posts }: Props) {
         setMonths((m) => {
           const next = addMonths(m[m.length - 1], -1)
           if (oldestMonthStart && next < oldestMonthStart) {
-            // もう追加しない
             ioRef.current?.disconnect()
             return m
           }
@@ -104,7 +100,7 @@ export function Calendar({ initialMonth = new Date(), posts }: Props) {
             </div>
 
             <div className='grid grid-cols-7 gap-7'>
-              {days.map((d) => {
+              {days.map((d, index) => {
                 const key = format(d, 'yyyy-MM-dd')
                 const items = postsByDay[key] ?? []
                 const cover = items[0]?.thumbUrl ?? null
@@ -126,7 +122,7 @@ export function Calendar({ initialMonth = new Date(), posts }: Props) {
                   <button
                     key={key}
                     type='button'
-                    onClick={() => items.length && /* open modal */ null}
+                    onClick={() => onClick(index)}
                     className={cn(
                       'relative aspect-square overflow-hidden rounded-full',
                       dimOutOfMonth && 'pointer-events-none opacity-0'

@@ -91,7 +91,7 @@ export function MyShowcase({ posts, isLatest, onLatest }: Props) {
                 : 'grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8'
             )}
           >
-            {viewMode === 'calendar' && <Calendar posts={posts} />}
+            {viewMode === 'calendar' && <Calendar posts={posts} onClick={setSelectedIndex}/>}
             {posts.map((post, i) => (
               <div
                 key={post.id}

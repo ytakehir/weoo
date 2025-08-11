@@ -31,7 +31,7 @@ export function FlipCard({ post }: Props) {
       >
         {/* Front */}
         <div className='card-body backface-hidden absolute flex size-full flex-col justify-between rounded-box bg-base-100 shadow-sm'>
-          <h2 className='card-title whitespace-pre-line text-left font-semibold text-4xl/relaxed'>
+          <h2 className='card-title whitespace-pre-line text-left font-semibold text-4xl/relaxed text-base-content'>
             {post.mission.title.replace(/\\n/g, '\n')}
           </h2>
           <button
