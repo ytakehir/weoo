@@ -93,7 +93,7 @@ export function Home({ mission, isSubscription }: Props) {
         {isSubscription ? <MissionCard mission={mission?.title ?? ''} onClickMission={onUpload} /> : <CardBack />}
         <div className='mt-20 w-full px-5'>
           <CardShowcase
-            mission={mission?.title.replace(/\\n/g, '') ?? ''}
+            mission={mission?.title.replace(/\\n/g, '')}
             posts={posts?.items}
             isLatest={isLatest}
             onLatest={() => setIsLatest(!isLatest)}

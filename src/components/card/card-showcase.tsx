@@ -12,7 +12,7 @@ const zenmaru = Zen_Maru_Gothic({
 })
 
 type Props = {
-  mission: string
+  mission?: string
   posts?: PostWithRelationsAndUrl[]
   isLatest: boolean
   onLatest: () => void
