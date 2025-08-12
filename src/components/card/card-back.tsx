@@ -9,7 +9,7 @@ const zenmaru = Zen_Maru_Gothic({
 
 export function CardBack() {
   return (
-    <div className='stack aspect-3/4 max-h-max w-96'>
+    <div className='stack aspect-3/4 max-h-max w-full'>
       <div className={cn('card', zenmaru.className)}>
         <div className='card-body flex size-full flex-col items-center justify-center rounded-box border-2 border-primary bg-base-100 shadow-sm'>
           <Image src={'/logo.png'} alt='logo' width={120} height={120} />

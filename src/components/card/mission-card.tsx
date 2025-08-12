@@ -13,7 +13,7 @@ type Props = {
 
 export function MissionCard({ mission, onClickMission }: Props) {
   return (
-    <div className='stack aspect-3/4 max-h-max w-96'>
+    <div className='stack aspect-3/4 max-h-max w-full'>
       <div className={cn('card', zenmaru.className)}>
         <div className='card-body flex size-full flex-col justify-between rounded-box border-2 border-primary bg-base-100 shadow-sm'>
           <h2 className='card-title whitespace-pre-line text-left font-semibold text-4xl/relaxed'>

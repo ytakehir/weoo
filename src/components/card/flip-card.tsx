@@ -20,7 +20,7 @@ export function FlipCard({ post }: Props) {
   return (
     <div
       role='none'
-      className={cn('perspective-midrange group aspect-3/4 w-96', zenmaru.className)}
+      className={cn('perspective-midrange group aspect-3/4 w-full', zenmaru.className)}
       onClick={() => setIsFront(!isFront)}
     >
       <div
@@ -55,7 +55,7 @@ export function FlipCard({ post }: Props) {
           </div>
 
           <div className='p-2'>
-            <p className='text-right text-base-content text-sm'>{format(new Date(post.updated_at), 'yyyy/MM/dd')}</p>
+            <p className='text-right text-base-content text-sm'>{format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}</p>
           </div>
         </div>
       </div>

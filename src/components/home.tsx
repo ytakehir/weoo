@@ -88,7 +88,7 @@ export function Home({ mission, isSubscription }: Props) {
       {isOpen && !isSubscription && (
         <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={() => router.push('/signin')} />
       )}
-      <div className='flex w-[95%] flex-col items-center justify-center'>
+      <div className='flex w-[90%] flex-col items-center justify-center'>
         {!isSubscription && (
           <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
             会員登録してお題に参加しよう📮✨

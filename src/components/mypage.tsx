@@ -12,6 +12,7 @@ type Props = {
 
 export function Mypage({ user }: Props) {
   const [isLatest, setIsLatest] = useState<boolean>(true)
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'calendar'>('list')
   const [posts, setPosts] = useState<PostWithPage>()
   const [state, dispatch] = useReducer(
     (state, action) => {
@@ -40,9 +41,9 @@ export function Mypage({ user }: Props) {
   }, [user?.id, isLatest, state.count])
 
   return (
-    <div className='flex w-[95%] flex-col items-center justify-start'>
-      <MyShowcase posts={posts?.items} isLatest={isLatest} onLatest={() => setIsLatest(!isLatest)} />
-      {posts && (
+    <div className='flex w-[90%] flex-col items-center justify-start'>
+      <MyShowcase posts={posts?.items} isLatest={isLatest} onLatest={() => setIsLatest(!isLatest)} viewMode={viewMode} onViewMode={() => setViewMode}/>
+      {posts && posts.items.length > 0 && viewMode !== 'calendar' && (
         <div className='join mt-20 grid grid-cols-2'>
           {state.count > 1 && (
             <button

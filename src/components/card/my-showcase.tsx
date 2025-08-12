@@ -16,10 +16,11 @@ type Props = {
   posts?: PostWithRelationsAndUrl[]
   isLatest: boolean
   onLatest: () => void
+  viewMode: 'grid' | 'list' | 'calendar'
+  onViewMode: (mode: string) => void
 }
 
-export function MyShowcase({ posts, isLatest, onLatest }: Props) {
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'calendar'>('list')
+export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   return (
@@ -37,7 +38,7 @@ export function MyShowcase({ posts, isLatest, onLatest }: Props) {
       <div className='mb-5 flex w-full items-center justify-end gap-x-4'>
         <div className='flex items-center gap-x-4'>
           <label htmlFor='grid'>
-            <input type='radio' id='grid' name='view' className='peer hidden' onChange={() => setViewMode('grid')} />
+            <input type='radio' id='grid' name='view' className='peer hidden' onChange={() => onViewMode('grid')} />
             <Grid2x2 className='size-6 peer-checked:stroke-[#fbc700]' />
           </label>
           <label htmlFor='list'>
@@ -46,7 +47,7 @@ export function MyShowcase({ posts, isLatest, onLatest }: Props) {
               id='list'
               name='view'
               className='peer hidden'
-              onChange={() => setViewMode('list')}
+              onChange={() => onViewMode('list')}
               defaultChecked
             />
             <List className='size-6 peer-checked:stroke-[#fbc700]' />
@@ -57,7 +58,7 @@ export function MyShowcase({ posts, isLatest, onLatest }: Props) {
               id='calendar'
               name='view'
               className='peer hidden'
-              onChange={() => setViewMode('calendar')}
+              onChange={() => onViewMode('calendar')}
             />
             <CalendarDays className='size-6 peer-checked:stroke-[#fbc700]' />
           </label>
@@ -123,7 +124,7 @@ export function MyShowcase({ posts, isLatest, onLatest }: Props) {
               <div className='modal-box w-[85%] bg-transparent p-0 shadow-none'>
                 <div className='carousel w-full gap-x-8 rounded-box'>
                   {posts.map((post, i) => (
-                    <div className='carousel-item w-full' id={`item${i}`}>
+                    <div key={post.id} className='carousel-item w-full' id={`item${i}`}>
                       <FlipCard post={post} />
                     </div>
                   ))}

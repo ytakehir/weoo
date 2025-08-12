@@ -114,7 +114,7 @@ export function CardShowcase({ mission, posts, isLatest, onLatest, isPosted, isS
 
                       <div className='card-body w-full items-end gap-0 p-2'>
                         <p className='text-right text-base-content text-sm'>
-                          {format(new Date(post.updated_at), 'yyyy/MM/dd')}
+                          {format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}
                         </p>
                       </div>
                     </>
@@ -154,7 +154,7 @@ export function CardShowcase({ mission, posts, isLatest, onLatest, isPosted, isS
 
                           <div className='card-body gap-0 p-2'>
                             <p className='text-right font-semibold text-sm'>
-                              {format(new Date(post.updated_at), 'yyyy/MM/dd')}
+                              {format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}
                             </p>
                           </div>
                         </div>
