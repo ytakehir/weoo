@@ -22,6 +22,8 @@ export function FlipCard({ post }: Props) {
       role='none'
       className={cn('perspective-midrange group aspect-3/4 w-full', zenmaru.className)}
       onClick={() => setIsFront(!isFront)}
+      onMouseEnter={() => setIsFront(false)}
+      onMouseLeave={() => setIsFront(true)}
     >
       <div
         className={cn(
@@ -38,7 +40,9 @@ export function FlipCard({ post }: Props) {
             type='button'
             className='card-actions btn btn-link relative items-center justify-center text-info-content no-underline'
           >
-            <span className='absolute inline-flex size-2/3 animate-ping rounded-full bg-info/75' />
+            <span
+              className={cn('absolute inline-flex size-2/3 animate-ping rounded-full bg-info/75', !isFront && 'hidden')}
+            />
             tap!
           </button>
         </div>
