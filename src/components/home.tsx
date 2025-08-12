@@ -88,7 +88,12 @@ export function Home({ mission, isSubscription }: Props) {
       {isOpen && !isSubscription && (
         <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={() => router.push('/signin')} />
       )}
-      <div className='flex w-full flex-col items-center justify-center'>
+      <div className='flex w-[95%] flex-col items-center justify-center'>
+        {!isSubscription && (
+          <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
+            会員登録してお題に参加しよう📮✨
+          </button>
+        )}
         <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>今日のお題</h1>
         {isSubscription ? <MissionCard mission={mission?.title ?? ''} onClickMission={onUpload} /> : <CardBack />}
         <div className='mt-20 w-full px-5'>

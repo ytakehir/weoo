@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaInstagram, FaTiktok } from 'react-icons/fa6'
+import { FaTiktok } from 'react-icons/fa6'
 
 export function Footer() {
   return (
@@ -23,11 +23,9 @@ export function Footer() {
       </nav>
       <nav>
         <div className='grid grid-flow-col gap-4'>
-          <Link href='/'>
-            <FaInstagram className='size-6' />
-          </Link>
-          <Link href='/'>
+          <Link className='flex items-center gap-x-2' href='https://www.tiktok.com/@weoo_official'>
             <FaTiktok className='size-6' />
+            <span className='font-semibold text-lg'>TikTok</span>
           </Link>
         </div>
       </nav>

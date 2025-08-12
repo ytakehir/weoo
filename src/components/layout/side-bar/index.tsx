@@ -2,7 +2,7 @@
 
 import { CircleQuestionMark, LogOut, MailQuestionMark, PanelRightClose, Send, User } from 'lucide-react'
 import Link from 'next/link'
-import { FaInstagram, FaTiktok } from 'react-icons/fa6'
+import { FaTiktok } from 'react-icons/fa6'
 import { useMissionForm } from './hooks'
 
 export function SideBar() {
@@ -80,12 +80,10 @@ export function SideBar() {
                 </fieldset>
               </form>
               <div className='mb-10 grid grid-flow-col gap-4'>
-                <Link href='/signin'>
-                  <FaInstagram className='size-6' />
-                </Link>
-                <Link href='/signin'>
-                  <FaTiktok className='size-6' />
-                </Link>
+                <Link className='flex items-center gap-x-2' href='https://www.tiktok.com/@weoo_official'>
+            <FaTiktok className='size-6' />
+            <span className='font-semibold text-lg'>TikTok</span>
+          </Link>
               </div>
             </div>
           </div>
