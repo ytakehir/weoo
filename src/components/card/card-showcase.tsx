@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js'
 import { format } from 'date-fns'
 import { ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List } from 'lucide-react'
 import { Zen_Maru_Gothic } from 'next/font/google'
@@ -12,6 +13,7 @@ const zenmaru = Zen_Maru_Gothic({
 })
 
 type Props = {
+  user: User | null
   mission?: string
   posts?: PostWithRelationsAndUrl[]
   isLatest: boolean
@@ -20,7 +22,7 @@ type Props = {
   isSubscription: boolean
 }
 
-export function CardShowcase({ mission, posts, isLatest, onLatest, isPosted, isSubscription }: Props) {
+export function CardShowcase({ user, mission, posts, isLatest, onLatest, isPosted, isSubscription }: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -39,7 +41,7 @@ export function CardShowcase({ mission, posts, isLatest, onLatest, isPosted, isS
       <h3 className='mt-2 mb-7 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
         <span className='text-3xl'>{posts?.length ?? 0}</span>この投稿
       </h3>
-      {!isPosted && isSubscription ? (
+      {isPosted && isSubscription ? (
         posts && posts.length > 0 ? (
           <>
             <div className='mb-5 flex w-full items-center justify-end gap-x-4'>
@@ -98,14 +100,21 @@ export function CardShowcase({ mission, posts, isLatest, onLatest, isPosted, isS
                   key={post.id}
                   className={cn(
                     'relative',
-                    viewMode === 'grid' ? 'aspect-square' : 'card flex aspect-[3/4] flex-col items-center'
+                    viewMode === 'grid' ? 'aspect-square' : 'card flex aspect-[3/4] flex-col items-center',
+                    viewMode === 'list' && post.profile_id === user?.id && 'indicator w-full'
                   )}
                 >
                   {viewMode === 'list' && (
                     <>
+                      {post.profile_id === user?.id && (
+                        <span className='indicator-item badge badge-info badge-soft right-12'>あなたの投稿</span>
+                      )}
                       <div className='relative aspect-[3/4] w-full'>
                         <Image
-                          className='!size-full rounded-box object-cover shadow-sm'
+                          className={cn(
+                            '!size-full rounded-box object-cover shadow-sm',
+                            post.profile_id === user?.id && 'ring-2 ring-info'
+                          )}
                           src={post.image_url_signed ?? '/no_image.png'}
                           alt={post.id}
                           fill

@@ -27,8 +27,8 @@ export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: 
     <div className={cn('flex w-full flex-col', zenmaru.className)}>
       <div className='flex w-full items-center gap-x-4 pb-10'>
         <div className='inline-grid *:[grid-area:1/1]'>
-          <div className='status status-lg status-error animate-ping' />
-          <div className='status status-lg status-error' />
+          <div className='status status-lg status-info animate-ping' />
+          <div className='status status-lg status-info' />
         </div>
         <h2 className='w-full font-semibold text-xl'>あなたの投稿</h2>
       </div>

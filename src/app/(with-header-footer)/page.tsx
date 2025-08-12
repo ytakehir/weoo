@@ -1,19 +1,12 @@
 'use server'
 
 import { Home } from '@/components/home'
-import { hasActiveSubscription } from '@/lib/stripe/subscription'
 import { getOrPickTodayMission } from '@/lib/supabase/actions/mission'
-import { createClient } from '@/lib/supabase/server'
+import { getViewer } from '@/lib/viewer'
 
 export default async function HomePage() {
-  const supabase = await createClient()
-  const [
-    {
-      data: { user }
-    },
-    mission
-  ] = await Promise.all([supabase.auth.getUser(), getOrPickTodayMission()])
-  const isSubscription = user ? await hasActiveSubscription() : false
+  const viewer = await getViewer()
+  const mission = await getOrPickTodayMission()
 
-  return <Home mission={mission} isSubscription={isSubscription} />
+  return <Home user={viewer.user} mission={mission} isSubscription={viewer.isSubscription} />
 }

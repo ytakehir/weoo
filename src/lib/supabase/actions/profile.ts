@@ -4,7 +4,7 @@
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/types/database'
 
-type ProfileRow = Database['public']['Tables']['profiles']['Row']
+export type ProfileRow = Database['public']['Tables']['profiles']['Row']
 
 async function getAuthedUid(): Promise<string> {
   const supabase = await createClient()

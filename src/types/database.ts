@@ -8,39 +8,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      _prisma_migrations: {
-        Row: {
-          applied_steps_count: number
-          checksum: string
-          finished_at: string | null
-          id: string
-          logs: string | null
-          migration_name: string
-          rolled_back_at: string | null
-          started_at: string
-        }
-        Insert: {
-          applied_steps_count?: number
-          checksum: string
-          finished_at?: string | null
-          id: string
-          logs?: string | null
-          migration_name: string
-          rolled_back_at?: string | null
-          started_at?: string
-        }
-        Update: {
-          applied_steps_count?: number
-          checksum?: string
-          finished_at?: string | null
-          id?: string
-          logs?: string | null
-          migration_name?: string
-          rolled_back_at?: string | null
-          started_at?: string
-        }
-        Relationships: []
-      }
       mission_submissions: {
         Row: {
           approved_at: string | null
@@ -136,7 +103,7 @@ export type Database = {
           image_url: string
           mission_id: string
           profile_id: string
-          status: Database['public']['Enums']['post_status']
+          status: Database['public']['Enums']['status']
           updated_at: string
         }
         Insert: {
@@ -145,7 +112,7 @@ export type Database = {
           image_url: string
           mission_id: string
           profile_id: string
-          status?: Database['public']['Enums']['post_status']
+          status?: Database['public']['Enums']['status']
           updated_at?: string
         }
         Update: {
@@ -154,7 +121,7 @@ export type Database = {
           image_url?: string
           mission_id?: string
           profile_id?: string
-          status?: Database['public']['Enums']['post_status']
+          status?: Database['public']['Enums']['status']
           updated_at?: string
         }
         Relationships: [
@@ -252,9 +219,19 @@ export type Database = {
         Args: { src: string }
         Returns: string
       }
+      pick_today_mission_jst: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          used_at: string | null
+        }
+      }
     }
     Enums: {
-      post_status: 'pending' | 'approved' | 'rejected'
+      status: 'pending' | 'approved' | 'rejected'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -374,7 +351,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      post_status: ['pending', 'approved', 'rejected']
+      status: ['pending', 'approved', 'rejected']
     }
   }
 } as const
