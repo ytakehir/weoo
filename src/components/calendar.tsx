@@ -129,7 +129,13 @@ export function Calendar({ initialMonth = new Date(), posts, onClick }: Props) {
                     )}
                   >
                     {cover && (
-                      <Image className='!size-full rounded-full object-cover brightness-95' src={cover} alt='' fill loading='lazy' />
+                      <Image
+                        className='!size-full rounded-full object-cover brightness-95'
+                        src={cover}
+                        alt=''
+                        fill
+                        loading='lazy'
+                      />
                     )}
                     <span
                       className={cn(
