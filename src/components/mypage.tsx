@@ -47,7 +47,7 @@ export function Mypage({ user }: Props) {
         isLatest={isLatest}
         onLatest={() => setIsLatest(!isLatest)}
         viewMode={viewMode}
-        onViewMode={() => setViewMode}
+        onViewMode={(mode) => setViewMode(mode)}
       />
       {posts && posts.items.length > 0 && viewMode !== 'calendar' && (
         <div className='join mt-20 grid grid-cols-2'>

@@ -99,7 +99,7 @@ export function Calendar({ initialMonth = new Date(), posts, onClick }: Props) {
               <h2 className='w-full text-center font-semibold text-md'>{format(m, 'yyyy年 M月', { locale: ja })}</h2>
             </div>
 
-            <div className='grid grid-cols-7 gap-7'>
+            <div className='grid grid-cols-7 gap-3'>
               {days.map((d, index) => {
                 const key = format(d, 'yyyy-MM-dd')
                 const items = postsByDay[key] ?? []
@@ -129,11 +129,11 @@ export function Calendar({ initialMonth = new Date(), posts, onClick }: Props) {
                     )}
                   >
                     {cover && (
-                      <Image className='!size-full rounded-full object-cover' src={cover} alt='' fill loading='lazy' />
+                      <Image className='!size-full rounded-full object-cover brightness-95' src={cover} alt='' fill loading='lazy' />
                     )}
                     <span
                       className={cn(
-                        'pointer-events-none absolute inset-0 grid place-items-center font-medium',
+                        'pointer-events-none absolute inset-0 grid place-items-center font-semibold',
                         items.length ? 'text-white' : 'text-base-content/50'
                       )}
                     >

@@ -2,6 +2,8 @@
 
 import { CircleQuestionMark, LogOut, MailQuestionMark, PanelRightClose, Send, User } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 import { FaTiktok } from 'react-icons/fa6'
 import { useMissionForm } from './hooks'
 
@@ -12,6 +14,16 @@ export function SideBar() {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = methods
+
+  const pathname = usePathname()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: watch pathname
+  useEffect(() => {
+    const drawerToggle = document.getElementById('side-bar') as HTMLInputElement | null
+    if (drawerToggle) {
+      drawerToggle.checked = false
+    }
+  }, [pathname])
 
   return (
     <div className='drawer drawer-end z-1000'>

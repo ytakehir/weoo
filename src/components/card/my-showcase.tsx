@@ -17,7 +17,7 @@ type Props = {
   isLatest: boolean
   onLatest: () => void
   viewMode: 'grid' | 'list' | 'calendar'
-  onViewMode: (mode: string) => void
+  onViewMode: (mode: 'grid' | 'list' | 'calendar') => void
 }
 
 export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: Props) {
