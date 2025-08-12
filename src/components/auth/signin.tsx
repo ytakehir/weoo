@@ -32,8 +32,12 @@ export function SignIn() {
           </div>
           <div>
             <h1 className='font-bold text-3xl text-base-content'>weoo</h1>
-            <p className='mt-4 text-base-content'>googleアカウントして、サインインしてください</p>
-            <p className='text-base-content'>ログイン後自動で決済画面に遷移します</p>
+            <p className='my-4 text-base-content'>
+              GOOGLEアカウント利用して、
+              <br />
+              サインインしてください
+            </p>
+            <p className='text-base-content/70 text-sm'>※ログイン後自動で決済画面に遷移します</p>
           </div>
         </div>
 
