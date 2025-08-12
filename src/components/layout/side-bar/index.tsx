@@ -81,9 +81,9 @@ export function SideBar() {
               </form>
               <div className='mb-10 grid grid-flow-col gap-4'>
                 <Link className='flex items-center gap-x-2' href='https://www.tiktok.com/@weoo_official'>
-            <FaTiktok className='size-6' />
-            <span className='font-semibold text-lg'>TikTok</span>
-          </Link>
+                  <FaTiktok className='size-6' />
+                  <span className='font-semibold text-lg'>TikTok</span>
+                </Link>
               </div>
             </div>
           </div>
