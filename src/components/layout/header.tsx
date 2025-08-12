@@ -36,7 +36,7 @@ export async function Header({ nav, isSubscription }: Props) {
           </nav>
 
           <div className='flex items-center space-x-4'>
-            {isSubscription ? (
+            {!isSubscription ? (
               <label htmlFor='side-bar' className='drawer-button'>
                 <Menu className='size-5' />
               </label>
