@@ -55,7 +55,9 @@ export function FlipCard({ post }: Props) {
           </div>
 
           <div className='p-2'>
-            <p className='text-right text-base-content text-sm'>{format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}</p>
+            <p className='text-right text-base-content text-sm'>
+              {format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}
+            </p>
           </div>
         </div>
       </div>

@@ -42,7 +42,13 @@ export function Mypage({ user }: Props) {
 
   return (
     <div className='flex w-[90%] flex-col items-center justify-start'>
-      <MyShowcase posts={posts?.items} isLatest={isLatest} onLatest={() => setIsLatest(!isLatest)} viewMode={viewMode} onViewMode={() => setViewMode}/>
+      <MyShowcase
+        posts={posts?.items}
+        isLatest={isLatest}
+        onLatest={() => setIsLatest(!isLatest)}
+        viewMode={viewMode}
+        onViewMode={() => setViewMode}
+      />
       {posts && posts.items.length > 0 && viewMode !== 'calendar' && (
         <div className='join mt-20 grid grid-cols-2'>
           {state.count > 1 && (
