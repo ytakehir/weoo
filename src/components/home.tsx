@@ -1,5 +1,6 @@
 'use client'
 
+import type { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import { useEffect, useReducer, useState, useTransition } from 'react'
 import { CardShowcase } from '@/components/card/card-showcase'
@@ -12,11 +13,12 @@ import { cn } from '@/lib/tailwind'
 import { CardBack } from './card/card-back'
 
 type Props = {
+  user: User | null
   mission: MissionRow | null
   isSubscription: boolean
 }
 
-export function Home({ mission, isSubscription }: Props) {
+export function Home({ user, mission, isSubscription }: Props) {
   const router = useRouter()
   const supabase = createClient()
   const [isLatest, setIsLatest] = useState<boolean>(true)
@@ -47,6 +49,10 @@ export function Home({ mission, isSubscription }: Props) {
     }
     fetchPost()
   }, [mission?.id, isLatest])
+
+  useEffect(() => {
+    setIsPosted(posts?.items.some((post) => post.profile_id === user?.id) ?? false)
+  }, [posts, user?.id])
 
   const onUpload = async (file: File | null) => {
     startTransition(async () => {
@@ -88,7 +94,7 @@ export function Home({ mission, isSubscription }: Props) {
       {isOpen && !isSubscription && (
         <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={() => router.push('/signin')} />
       )}
-      <div className='flex w-[95%] flex-col items-center justify-center'>
+      <div className='flex w-[90%] flex-col items-center justify-center'>
         {!isSubscription && (
           <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
             会員登録してお題に参加しよう📮✨
@@ -98,6 +104,7 @@ export function Home({ mission, isSubscription }: Props) {
         {isSubscription ? <MissionCard mission={mission?.title ?? ''} onClickMission={onUpload} /> : <CardBack />}
         <div className='mt-20 w-full px-5'>
           <CardShowcase
+            user={user}
             mission={mission?.title.replace(/\\n/g, '')}
             posts={posts?.items}
             isLatest={isLatest}
@@ -105,7 +112,7 @@ export function Home({ mission, isSubscription }: Props) {
             isPosted={isPosted}
             isSubscription={isSubscription}
           />
-          {isPosted && (
+          {posts && posts.items.length > 0 && (
             <div className='join mt-20 grid grid-cols-2'>
               {state.count > 1 && (
                 <button

@@ -1,14 +1,8 @@
 import { format } from 'date-fns'
-import { Zen_Maru_Gothic } from 'next/font/google'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
-
-const zenmaru = Zen_Maru_Gothic({
-  weight: '500',
-  subsets: ['latin']
-})
 
 type Props = {
   post: PostWithRelationsAndUrl
@@ -20,8 +14,10 @@ export function FlipCard({ post }: Props) {
   return (
     <div
       role='none'
-      className={cn('perspective-midrange group aspect-3/4 w-96', zenmaru.className)}
+      className='perspective-midrange group aspect-3/4 w-full'
       onClick={() => setIsFront(!isFront)}
+      onMouseEnter={() => setIsFront(false)}
+      onMouseLeave={() => setIsFront(true)}
     >
       <div
         className={cn(
@@ -38,7 +34,9 @@ export function FlipCard({ post }: Props) {
             type='button'
             className='card-actions btn btn-link relative items-center justify-center text-info-content no-underline'
           >
-            <span className='absolute inline-flex size-2/3 animate-ping rounded-full bg-info/75' />
+            <span
+              className={cn('absolute inline-flex size-2/3 animate-ping rounded-full bg-info/75', !isFront && 'hidden')}
+            />
             tap!
           </button>
         </div>
@@ -55,7 +53,9 @@ export function FlipCard({ post }: Props) {
           </div>
 
           <div className='p-2'>
-            <p className='text-right text-base-content text-sm'>{format(new Date(post.updated_at), 'yyyy/MM/dd')}</p>
+            <p className='text-right text-base-content text-sm'>
+              {format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}
+            </p>
           </div>
         </div>
       </div>

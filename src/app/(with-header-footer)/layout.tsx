@@ -3,39 +3,44 @@
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { SideBar } from '@/components/layout/side-bar'
-import { hasActiveSubscription } from '@/lib/stripe/subscription'
-import { createClient } from '@/lib/supabase/server'
+import { cn } from '@/lib/tailwind'
+import { getViewer } from '@/lib/viewer'
+import { ViewerProvider } from '@/providers/view-providers'
 import '@/styles/globals.css'
+import { Zen_Maru_Gothic } from 'next/font/google'
+
+const zenmaru = Zen_Maru_Gothic({
+  weight: '500',
+  subsets: ['latin']
+})
 
 export default async function HeaderFooterLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const supabase = await createClient()
-  const {
-    data: { user }
-  } = await supabase.auth.getUser()
-  const isSubscription = user ? await hasActiveSubscription() : false
+  const viewer = await getViewer()
 
   return (
-    <div className='flex flex-col items-center'>
-      <Header
-        nav={[
-          {
-            title: ' FAQ',
-            link: '/faq'
-          },
-          {
-            title: ' Contact',
-            link: '/contact'
-          }
-        ]}
-        isSubscription={isSubscription}
-      />
-      <SideBar />
-      <div className='my-20 flex min-h-screen w-full justify-center'>{children}</div>
-      <Footer />
-    </div>
+    <ViewerProvider initial={viewer}>
+      <div className='flex flex-col items-center'>
+        <Header
+          nav={[
+            {
+              title: ' FAQ',
+              link: '/faq'
+            },
+            {
+              title: ' Contact',
+              link: '/contact'
+            }
+          ]}
+          isSubscription={viewer.isSubscription}
+        />
+        <SideBar />
+        <div className={cn('my-20 flex min-h-screen w-full justify-center', zenmaru.className)}>{children}</div>
+        <Footer />
+      </div>
+    </ViewerProvider>
   )
 }

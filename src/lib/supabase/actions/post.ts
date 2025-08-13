@@ -4,7 +4,7 @@
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/types/database'
 
-export type PostRow = Database['public']['Tables']['posts']['Row']
+type PostRow = Database['public']['Tables']['posts']['Row']
 type PostInsert = Database['public']['Tables']['posts']['Insert']
 type PostUpdate = Database['public']['Tables']['posts']['Update']
 type MissionRow = Database['public']['Tables']['missions']['Row']

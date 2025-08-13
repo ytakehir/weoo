@@ -2,19 +2,14 @@
 
 import { redirect } from 'next/navigation'
 import { Mypage } from '@/components/mypage'
-import { hasActiveSubscription } from '@/lib/stripe/subscription'
-import { createClient } from '@/lib/supabase/server'
+import { getViewer } from '@/lib/viewer'
 
 export default async function MypagePage() {
-  const supabase = await createClient()
-  const {
-    data: { user }
-  } = await supabase.auth.getUser()
-  const isSubscription = user ? await hasActiveSubscription() : false
+  const viewer = await getViewer()
 
-  if (!isSubscription) {
+  if (!viewer.isSubscription) {
     redirect('/signin')
   }
 
-  return <Mypage user={user} />
+  return <Mypage user={viewer.user} />
 }

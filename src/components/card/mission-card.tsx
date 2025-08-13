@@ -1,11 +1,3 @@
-import { Zen_Maru_Gothic } from 'next/font/google'
-import { cn } from '@/lib/tailwind'
-
-const zenmaru = Zen_Maru_Gothic({
-  weight: '500',
-  subsets: ['latin']
-})
-
 type Props = {
   mission: string
   onClickMission: (e: File | null) => void
@@ -13,8 +5,8 @@ type Props = {
 
 export function MissionCard({ mission, onClickMission }: Props) {
   return (
-    <div className='stack aspect-3/4 max-h-max w-96'>
-      <div className={cn('card', zenmaru.className)}>
+    <div className='stack aspect-3/4 max-h-max w-full'>
+      <div className='card'>
         <div className='card-body flex size-full flex-col justify-between rounded-box border-2 border-primary bg-base-100 shadow-sm'>
           <h2 className='card-title whitespace-pre-line text-left font-semibold text-4xl/relaxed'>
             {mission.replace(/\\n/g, '\n')}

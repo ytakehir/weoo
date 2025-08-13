@@ -111,46 +111,31 @@ export async function ensureStripeCustomer() {
   const {
     data: { user }
   } = await supabase.auth.getUser()
-  if (!user) throw new Error('No auth user')
+  if (!user) return null
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, stripe_customer_id, display_name')
+    .select('id, display_name, stripe_customer_id, email')
     .eq('id', user.id)
     .maybeSingle()
 
-  if (!profile) {
-    const { data: inserted, error } = await supabase
-      .from('profiles')
-      .insert({ id: user.id, display_name: user.user_metadata?.name ?? null })
-      .select('id, stripe_customer_id')
-      .single()
-    if (error) throw error
-    return await createIfMissing(inserted.stripe_customer_id)
+  let customerId = profile?.stripe_customer_id ?? null
+  if (customerId) {
+    try {
+      await stripe.customers.retrieve(customerId)
+      return customerId // 有効
+    } catch {
+      customerId = null
+    }
   }
 
-  return await createIfMissing(profile.stripe_customer_id)
+  const customer = await stripe.customers.create({
+    email: user.email ?? undefined,
+    name: profile?.display_name ?? undefined,
+    metadata: { profile_id: user.id }
+  })
 
-  async function createIfMissing(currentId?: string | null) {
-    if (currentId) return currentId
+  await supabase.from('profiles').update({ stripe_customer_id: customer.id }).eq('id', user.id)
 
-    const idempotencyKey = `cust_${user?.id}`
-
-    const customer = await stripe.customers.create(
-      {
-        email: user?.email ?? undefined,
-        name: user?.user_metadata?.name ?? undefined,
-        metadata: { supabase_user_id: user?.id ?? '' }
-      },
-      { idempotencyKey }
-    )
-
-    const { error: upErr } = await supabase
-      .from('profiles')
-      .update({ stripe_customer_id: customer.id })
-      .eq('id', user?.id)
-    if (upErr) throw upErr
-
-    return customer.id
-  }
+  return customer.id
 }
