@@ -3,3 +3,12 @@
   /* biome-ignore lint/correctness/noUnknownProperty: daisy UI */
   themes: all;
 }
+
+@layer components {
+  .btn {
+    border-start-start-radius: var(--join-ss, var(--radius-field));
+    border-start-end-radius: var(--join-se, var(--radius-field));
+    border-end-end-radius: var(--join-ee, var(--radius-field));
+    border-end-start-radius: var(--join-es, var(--radius-field));
+  }
+}

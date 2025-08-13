@@ -6,6 +6,7 @@ import type { ContactForm } from './type'
 
 export const useContactForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSuccess, setSuccess] = useState(false)
 
   const schema = z.object({
     name: z.string().min(1, { message: '名前は必須です' }),
@@ -32,25 +33,28 @@ export const useContactForm = () => {
 
   const onSubmit = async (data: ContactForm) => {
     try {
-      await fetch('/api/resend', {
+      const response = await fetch('/api/resend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           name: data.name,
-          from: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? '',
+          from: data.email,
           to: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? '',
-          replyTo: data.email,
           subject: data.subject,
           message: data.message
         })
       })
       setIsSubmitted(true)
+      setSuccess(response.ok)
+      window.scrollTo({ top: 0 })
       methods.reset()
 
-      // Reset success state after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000)
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setSuccess(false)
+      }, 10000)
     } catch (error) {
       console.error('error:', error)
     }
@@ -59,6 +63,7 @@ export const useContactForm = () => {
   return {
     isSubmitted,
     setIsSubmitted,
+    isSuccess,
     methods,
     onSubmit
   }
