@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
-  apiVersion: '2025-06-30.basil'
+  apiVersion: '2025-07-30.basil'
 })
 
 // Webhook では service role を使う（Cookie不要＆RLSを越えて書き込める）
