@@ -40,8 +40,9 @@ export const useContactForm = () => {
         },
         body: JSON.stringify({
           name: data.name,
-          from: data.email,
+          from: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? '',
           to: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? '',
+          replyTo: data.email,
           subject: data.subject,
           message: data.message
         })
