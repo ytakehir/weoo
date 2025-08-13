@@ -1,17 +1,10 @@
 'use client'
 
-import { Noto_Sans_JP } from 'next/font/google'
 import Link from 'next/link'
-import { cn } from '@/lib/tailwind'
-
-const notosan = Noto_Sans_JP({
-  weight: '500',
-  subsets: ['latin']
-})
 
 export default function Terms() {
   return (
-    <div className={cn('min-h-screen bg-background', notosan.className)}>
+    <div className='min-h-screen bg-background'>
       <div className='container mx-auto max-w-4xl px-4 py-16'>
         {/* Hero Section */}
         <div className='mb-16 space-y-6 text-center'>

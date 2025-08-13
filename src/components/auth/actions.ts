@@ -21,11 +21,8 @@ export async function emailSignIn(_prevState: EmailSignInState, formData: FormDa
     return { ok: false, error: parsed.error.issues[0]?.message ?? '入力内容を確認してください' }
   }
   const { email } = parsed.data
-
   const supabase = await createClient()
-
-  const header = await headers()
-  const origin = header.get('origin') ?? process.env.NEXT_PUBLIC_BASE_URL ?? ''
+  const origin = (await headers()).get('origin') ?? process.env.NEXT_PUBLIC_BASE_URL ?? ''
 
   let next = parsed.data.next ?? '/'
 

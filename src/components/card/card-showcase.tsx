@@ -1,16 +1,10 @@
 import type { User } from '@supabase/supabase-js'
 import { format } from 'date-fns'
 import { ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List } from 'lucide-react'
-import { Zen_Maru_Gothic } from 'next/font/google'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
-
-const zenmaru = Zen_Maru_Gothic({
-  weight: '500',
-  subsets: ['latin']
-})
 
 type Props = {
   user: User | null
@@ -27,7 +21,7 @@ export function CardShowcase({ user, mission, posts, isLatest, onLatest, isPoste
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   return (
-    <div className={cn('flex w-full flex-col', zenmaru.className)}>
+    <div className='flex w-full flex-col'>
       <div className='flex w-full items-center gap-x-4 pb-10'>
         <div className='inline-grid *:[grid-area:1/1]'>
           <div className='status status-lg status-accent animate-ping' />

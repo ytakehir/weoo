@@ -1,14 +1,8 @@
 import { format } from 'date-fns'
-import { Zen_Maru_Gothic } from 'next/font/google'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
-
-const zenmaru = Zen_Maru_Gothic({
-  weight: '500',
-  subsets: ['latin']
-})
 
 type Props = {
   post: PostWithRelationsAndUrl
@@ -20,7 +14,7 @@ export function FlipCard({ post }: Props) {
   return (
     <div
       role='none'
-      className={cn('perspective-midrange group aspect-3/4 w-full', zenmaru.className)}
+      className='perspective-midrange group aspect-3/4 w-full'
       onClick={() => setIsFront(!isFront)}
       onMouseEnter={() => setIsFront(false)}
       onMouseLeave={() => setIsFront(true)}

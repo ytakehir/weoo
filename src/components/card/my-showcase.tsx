@@ -1,16 +1,10 @@
 import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List } from 'lucide-react'
-import { Zen_Maru_Gothic } from 'next/font/google'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
 import { Calendar } from '../calendar'
 import { FlipCard } from './flip-card'
-
-const zenmaru = Zen_Maru_Gothic({
-  weight: '500',
-  subsets: ['latin']
-})
 
 type Props = {
   posts?: PostWithRelationsAndUrl[]
@@ -24,7 +18,7 @@ export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   return (
-    <div className={cn('flex w-full flex-col', zenmaru.className)}>
+    <div className='flex w-full flex-col'>
       <div className='flex w-full items-center gap-x-4 pb-10'>
         <div className='inline-grid *:[grid-area:1/1]'>
           <div className='status status-lg status-info animate-ping' />

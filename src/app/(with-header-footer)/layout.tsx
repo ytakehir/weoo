@@ -3,9 +3,16 @@
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { SideBar } from '@/components/layout/side-bar'
+import { cn } from '@/lib/tailwind'
 import { getViewer } from '@/lib/viewer'
 import { ViewerProvider } from '@/providers/view-providers'
 import '@/styles/globals.css'
+import { Zen_Maru_Gothic } from 'next/font/google'
+
+const zenmaru = Zen_Maru_Gothic({
+  weight: '500',
+  subsets: ['latin']
+})
 
 export default async function HeaderFooterLayout({
   children
@@ -31,7 +38,7 @@ export default async function HeaderFooterLayout({
           isSubscription={viewer.isSubscription}
         />
         <SideBar />
-        <div className='my-20 flex min-h-screen w-full justify-center'>{children}</div>
+        <div className={cn('my-20 flex min-h-screen w-full justify-center', zenmaru.className)}>{children}</div>
         <Footer />
       </div>
     </ViewerProvider>

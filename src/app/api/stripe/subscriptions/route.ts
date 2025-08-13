@@ -8,28 +8,19 @@ export async function POST(req: NextRequest) {
     const origin = headersList.get('origin')
     const { priceId, customerId } = await req.json()
 
-    if (!priceId) return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 })
+    if (!priceId || !customerId) return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 })
 
     const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1
-        }
-      ],
-      customer: customerId,
       mode: 'subscription',
+      customer: customerId,
       payment_method_types: ['card'],
-      billing_address_collection: 'required',
-      success_url: `${origin ?? process.env.NEXT_PUBLIC_BASE_URL ?? ''}/?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin ?? process.env.NEXT_PUBLIC_BASE_URL ?? ''}/`,
+      line_items: [{ price: priceId, quantity: 1 }],
       automatic_tax: { enabled: true },
-      subscription_data: {
-        trial_period_days: 7
-      },
-      customer_update: {
-        address: 'auto'
-      }
+      billing_address_collection: 'required',
+      customer_update: { address: 'auto' },
+      success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/`,
+      subscription_data: { trial_period_days: 14 }
     })
     return NextResponse.json({ sessionId: session.id, sessionUrl: session.url }, { status: 200 })
     // biome-ignore lint/suspicious/noExplicitAny: try-catch

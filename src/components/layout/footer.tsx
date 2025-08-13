@@ -4,7 +4,7 @@ import { FaTiktok } from 'react-icons/fa6'
 export function Footer() {
   return (
     <footer className='footer footer-horizontal footer-center w-screen rounded bg-base-200 p-10 text-base-content'>
-      <nav className='grid w-full grid-cols-5 gap-4'>
+      <nav className='grid grid-cols-5 gap-4'>
         <Link className='link link-hover' href='/signin'>
           Signin
         </Link>
