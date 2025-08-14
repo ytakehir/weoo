@@ -6,7 +6,7 @@ import type { Database } from '@/types/database'
 
 export type ProfileRow = Database['public']['Tables']['profiles']['Row']
 
-async function getAuthedUid(): Promise<string> {
+const getAuthedUid = async (): Promise<string> => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -20,7 +20,7 @@ async function getAuthedUid(): Promise<string> {
 /**
  * 自分の Stripe Customer ID を取得
  */
-export async function getMyStripeCustomerId(): Promise<ProfileRow['stripe_customer_id'] | null> {
+export const getMyStripeCustomerId = async (): Promise<ProfileRow['stripe_customer_id'] | null> => {
   const supabase = await createClient()
   const uid = await getAuthedUid()
 

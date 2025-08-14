@@ -9,6 +9,6 @@ export default meta
 
 export const Default: StoryObj<typeof SideBar> = {
   render: () => {
-    return <SideBar />
+    return <SideBar isSubscription={true}/>
   }
 }

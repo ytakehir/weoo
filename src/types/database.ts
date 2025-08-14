@@ -1,7 +1,7 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: '13.0.4'
@@ -103,7 +103,6 @@ export type Database = {
           image_url: string
           mission_id: string
           profile_id: string
-          status: Database['public']['Enums']['status']
           updated_at: string
         }
         Insert: {
@@ -112,7 +111,6 @@ export type Database = {
           image_url: string
           mission_id: string
           profile_id: string
-          status?: Database['public']['Enums']['status']
           updated_at?: string
         }
         Update: {
@@ -121,7 +119,6 @@ export type Database = {
           image_url?: string
           mission_id?: string
           profile_id?: string
-          status?: Database['public']['Enums']['status']
           updated_at?: string
         }
         Relationships: [
@@ -146,24 +143,30 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           display_name: string | null
+          free_trial_end: string | null
           id: string
           stripe_customer_id: string | null
+          ticket: number
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          free_trial_end?: string | null
           id: string
           stripe_customer_id?: string | null
+          ticket?: number
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          free_trial_end?: string | null
           id?: string
           stripe_customer_id?: string | null
+          ticket?: number
           updated_at?: string
         }
         Relationships: []
@@ -211,7 +214,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      consume_one_ticket: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      has_access: {
+        Args: { uid: string }
+        Returns: boolean
+      }
       has_active_subscription: {
+        Args: { uid: string }
+        Returns: boolean
+      }
+      is_on_free_trial: {
         Args: { uid: string }
         Returns: boolean
       }
@@ -228,6 +243,22 @@ export type Database = {
           updated_at: string
           used_at: string | null
         }
+      }
+      posts_count_by_mission: {
+        Args: { post_mission_id: string }
+        Returns: number
+      }
+      posts_count_total: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      topup_event_tickets: {
+        Args: { inc: number }
+        Returns: undefined
+      }
+      topup_weekly_tickets: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {

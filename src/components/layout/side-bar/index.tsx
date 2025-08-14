@@ -1,14 +1,18 @@
 'use client'
 
-import { CircleQuestionMark, LogOut, MailQuestionMark, PanelRightClose, Send, User } from 'lucide-react'
+import { CircleQuestionMark, LogIn, LogOut, MailQuestionMark, PanelRightClose, Send, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { FaTiktok } from 'react-icons/fa6'
 import { useMissionForm } from './hooks'
 
-export function SideBar() {
-  const { isSubmitted, methods, onSubmit, handlePortal } = useMissionForm()
+type Props = {
+  isSubscription: boolean
+}
+
+export function SideBar({ isSubscription }: Props) {
+  const { isSubmitted, methods, onSubmit, handlePortal, handleSubscribe } = useMissionForm()
   const {
     register,
     handleSubmit,
@@ -59,12 +63,26 @@ export function SideBar() {
                 </Link>
               </li>
               <li>
-                <button type='button' className='link link-error link-hover' onClick={() => handlePortal()}>
-                  <div className='flex items-center gap-x-5'>
-                    <LogOut className='size-4' />
-                    Unsubscribe
+                {isSubscription ? (
+                  <button type='button' className='link link-error link-hover' onClick={() => handlePortal()}>
+                    <div className='flex items-center gap-x-5'>
+                      <LogOut className='size-4' />
+                      Unsubscribe
+                    </div>
+                  </button>
+                ) : (
+                  <div
+                    className='tooltip tooltip-right tooltip-open tooltip-neutral w-fit drop-shadow-md before:p-2 before:text-xs'
+                    data-tip='追加 1週間無料✨'
+                  >
+                    <button type='button' className='link link-primary link-hover' onClick={() => handleSubscribe()}>
+                      <div className='flex items-center gap-x-5'>
+                        <LogIn className='size-4' />
+                        Subscribe
+                      </div>
+                    </button>
                   </div>
-                </button>
+                )}
               </li>
             </nav>
             <div className='flex flex-col items-center justify-center gap-y-10'>

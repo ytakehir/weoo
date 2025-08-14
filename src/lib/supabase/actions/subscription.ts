@@ -106,7 +106,7 @@ export const upsertFromStripe = async (payload: SubscriptionInsert): Promise<Sub
   return data
 }
 
-export async function ensureStripeCustomer() {
+export const ensureStripeCustomer = async () => {
   const supabase = await createClient()
   const {
     data: { user }

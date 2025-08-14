@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { FAQ } from '@/components/faq'
+import { FAQ } from '@/components/page/faq'
 
 const meta: Meta<typeof FAQ> = {
   component: FAQ

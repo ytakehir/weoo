@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { fn } from 'storybook/internal/test'
-import { PlanModal } from '@/components/plan-modal'
+import { PlanModal } from '@/components/modal/plan-modal'
 
 const meta: Meta<typeof PlanModal> = {
   component: PlanModal

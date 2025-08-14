@@ -1,20 +1,15 @@
-import type { User } from '@supabase/supabase-js'
+import { differenceInCalendarDays } from 'date-fns'
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
-import type { ProfileRow } from './supabase/actions/profile'
-
-type Viewer = {
-  user: User | null
-  profile: ProfileRow | null
-  isSubscription: boolean
-}
+import type { Viewer } from '@/types/viewer'
 
 export const getViewer = cache(async (): Promise<Viewer> => {
   const supabase = await createClient()
   const {
     data: { user }
   } = await supabase.auth.getUser()
-  if (!user) return { user: null, profile: null, isSubscription: false }
+  if (!user)
+    return { user: null, profile: null, isSubscription: false, freeTrail: { isActive: false, endDate: new Date() } }
 
   const [{ data: profile }, { data: sub }] = await Promise.all([
     supabase.from('profiles').select().eq('id', user.id).maybeSingle(),
@@ -29,6 +24,10 @@ export const getViewer = cache(async (): Promise<Viewer> => {
   return {
     user: user,
     profile: profile ?? null,
-    isSubscription: !!sub
+    isSubscription: !!sub,
+    freeTrail: {
+      isActive: differenceInCalendarDays(profile.free_trail_end, new Date()) <= 7,
+      endDate: new Date(profile.free_trail_end)
+    }
   }
 })

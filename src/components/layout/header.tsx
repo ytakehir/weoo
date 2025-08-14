@@ -1,6 +1,7 @@
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Viewer } from '@/types/viewer'
 
 type Props = {
   nav: {
@@ -8,9 +9,10 @@ type Props = {
     link: string
   }[]
   isSubscription: boolean
+  freeTrail: Viewer['freeTrail']
 }
 
-export async function Header({ nav, isSubscription }: Props) {
+export async function Header({ nav, isSubscription, freeTrail }: Props) {
   return (
     <header className='fixed top-0 right-0 left-0 z-50 w-full bg-base-100'>
       <div className='container mx-auto px-4 py-4 sm:px-6'>
@@ -36,12 +38,12 @@ export async function Header({ nav, isSubscription }: Props) {
           </nav>
 
           <div className='flex items-center space-x-4'>
-            {isSubscription ? (
+            {isSubscription || freeTrail.isActive ? (
               <label htmlFor='side-bar' className='drawer-button'>
                 <Menu className='size-5' />
               </label>
             ) : (
-              <Link href='/signin'>
+              <Link href='/signin?plan=free'>
                 <button type='button' className='btn btn-sm btn-link text-sm no-underline'>
                   Sign In
                 </button>

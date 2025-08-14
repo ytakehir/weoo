@@ -1,26 +1,38 @@
 'use client'
 
 import type { User } from '@supabase/supabase-js'
+import { A11y, Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useReducer, useState, useTransition } from 'react'
 import { CardShowcase } from '@/components/card/card-showcase'
 import { MissionCard } from '@/components/card/mission-card'
-import { PlanModal } from '@/components/plan-modal'
+import { checkoutSubscribe } from '@/lib/stripe/subscription'
 import type { MissionRow } from '@/lib/supabase/actions/mission'
-import { createPost, getPostsByMission, type PostWithPage } from '@/lib/supabase/actions/post'
+import { createPost, getPostsByMission, getPostsCountByMission, type PostWithPage } from '@/lib/supabase/actions/post'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/tailwind'
-import { CardBack } from './card/card-back'
+import type { Viewer } from '@/types/viewer'
+import { CardBack } from '../card/card-back'
+import { SigninModal } from '../modal/signin-modal'
+import { UpgradeModal } from '../modal/upgrade-modal'
 
 type Props = {
   user: User | null
-  mission: MissionRow | null
+  missions: MissionRow[] | null
   isSubscription: boolean
+  freeTrail: Viewer['freeTrail']
 }
 
-export function Home({ user, mission, isSubscription }: Props) {
+export function Home({ user, missions, isSubscription, freeTrail }: Props) {
   const router = useRouter()
   const supabase = createClient()
+  const [active, setActive] = useState(0)
+  const [mission, setMission] = useState<MissionRow | undefined>(missions?.[0])
+  const [postCount, setPostCount] = useState<number>(0)
   const [isLatest, setIsLatest] = useState<boolean>(true)
   const [isPosted, setIsPosted] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(true)
@@ -41,14 +53,6 @@ export function Home({ user, mission, isSubscription }: Props) {
     },
     { count: 1 }
   )
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      const posts = await getPostsByMission(mission?.id ?? '', isLatest ? 'desc' : 'asc')
-      if (posts) setPosts(posts)
-    }
-    fetchPost()
-  }, [mission?.id, isLatest])
 
   useEffect(() => {
     setIsPosted(posts?.items.some((post) => post.profile_id === user?.id) ?? false)
@@ -89,24 +93,97 @@ export function Home({ user, mission, isSubscription }: Props) {
       }
     })
   }
+
+  useEffect(() => {
+    const m = missions?.[active]
+    if (!m) return
+    setMission(m)
+    let canceled = false
+    ;(async () => {
+      const count = await getPostsCountByMission(m.id)
+      const p = await getPostsByMission(m.id, isLatest ? 'desc' : 'asc')
+      if (!canceled) {
+        setPostCount(count ?? 0)
+        if (p) setPosts(p)
+      }
+    })()
+    return () => {
+      canceled = true
+    }
+  }, [active, missions, isLatest])
+
   return (
     <>
-      {isOpen && !isSubscription && (
-        <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={() => router.push('/signin')} />
+      {isOpen && !user && (
+        <SigninModal
+          isOpen={isOpen}
+          onIsOpen={() => setIsOpen(!true)}
+          onSubscribe={() => router.push('/signin?plan=pro')}
+          onSignin={() => router.push('/signin')}
+        />
+      )}
+      {isOpen && user && !isSubscription && (
+        <UpgradeModal
+          isOpen={isOpen}
+          onIsOpen={() => setIsOpen(!true)}
+          onSubscribe={() => checkoutSubscribe(7)}
+          trailEndDate={freeTrail.endDate}
+        />
       )}
       <div className='flex w-[90%] flex-col items-center justify-center'>
-        {!isSubscription && (
+        {!user && (
           <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
-            会員登録してお題に参加しよう📮✨
+            会員登録して今日のお題に参加しよう📮✨
           </button>
         )}
-        <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>今日のお題</h1>
-        {isSubscription ? <MissionCard mission={mission?.title ?? ''} onClickMission={onUpload} /> : <CardBack />}
+        {user && !isSubscription && (
+          <button type='button' className='btn btn-link text-base-content' onClick={() => checkoutSubscribe(7)}>
+            サブスク登録して過去のお題に参加しよう📮✨
+          </button>
+        )}
+        <div className='flex items-center justify-center gap-4'>
+          <ChevronLeft
+            className={cn(
+              'size-8 opacity-0',
+              missions && missions?.length > 1 && (isSubscription || freeTrail.isActive) && 'opacity-100'
+            )}
+          />
+          <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>今日のお題</h1>
+          <ChevronRight
+            className={cn('size-8 opacity-0', active > 0 && (isSubscription || freeTrail.isActive) && 'opacity-100')}
+          />
+        </div>
+        {isSubscription && (
+          <Swiper
+            dir='rtl'
+            modules={[Navigation, A11y]}
+            slidesPerView={1}
+            resistanceRatio={0.5}
+            speed={350}
+            onSlideChange={(swiper) => setActive(swiper.activeIndex)}
+            className='w-full'
+            spaceBetween={'10%'}
+          >
+            {missions?.map((mission) => (
+              <SwiperSlide key={mission.id} dir='ltr'>
+                <MissionCard mission={mission.title} onClickMission={onUpload} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+        {freeTrail.isActive && !isSubscription && (
+          <MissionCard mission={missions?.[0].title ?? ''} onClickMission={onUpload} />
+        )}
+        {((!isSubscription && !freeTrail.isActive) || !user) && <CardBack />}
+        {(isSubscription || freeTrail.isActive) && (
+          <p className='mt-2 text-base-content text-xs'>💡 カードを左右にスワイプして今週のお題に参加しよう</p>
+        )}
         <div className='mt-20 w-full px-5'>
           <CardShowcase
             user={user}
             mission={mission?.title.replace(/\\n/g, '')}
             posts={posts?.items}
+            postCount={postCount}
             isLatest={isLatest}
             onLatest={() => setIsLatest(!isLatest)}
             isPosted={isPosted}

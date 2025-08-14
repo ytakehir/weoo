@@ -1,9 +1,9 @@
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List } from 'lucide-react'
+import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
-import { Calendar } from '../calendar'
+import { Calendar } from './calendar'
 import { FlipCard } from './flip-card'
 
 type Props = {
@@ -12,9 +12,10 @@ type Props = {
   onLatest: () => void
   viewMode: 'grid' | 'list' | 'calendar'
   onViewMode: (mode: 'grid' | 'list' | 'calendar') => void
+  isSubscription: boolean
 }
 
-export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: Props) {
+export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode, isSubscription }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   return (
@@ -46,16 +47,22 @@ export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: 
             />
             <List className='size-6 peer-checked:stroke-[#fbc700]' />
           </label>
-          <label htmlFor='calendar'>
-            <input
-              type='radio'
-              id='calendar'
-              name='view'
-              className='peer hidden'
-              onChange={() => onViewMode('calendar')}
-            />
-            <CalendarDays className='size-6 peer-checked:stroke-[#fbc700]' />
-          </label>
+          <div className='indicator'>
+            {!isSubscription && <Sparkles className='indicator-item top-1 right-1 size-4 fill-warning text-warning' />}
+            <label htmlFor='calendar'>
+              <input
+                type='radio'
+                id='calendar'
+                name='view'
+                className='peer hidden'
+                onChange={() => onViewMode('calendar')}
+                disabled={!isSubscription}
+              />
+              <CalendarDays
+                className={cn('size-6 peer-checked:stroke-[#fbc700]', !isSubscription && 'stroke-base-content/30')}
+              />
+            </label>
+          </div>
         </div>
         <div className='dropdown dropdown-end dropdown-hover'>
           <button tabIndex={0} type='button' className='btn btn-ghost m-1 items-center p-0 text-md'>
@@ -136,8 +143,8 @@ export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode }: 
           )}
         </>
       ) : (
-        <p className='flex w-full items-center justify-center py-20 font-semibold text-base-content/70 text-lg'>
-          達成した写真を投稿して、
+        <p className='flex w-full items-center justify-center py-20 text-center font-semibold text-base-content/70 text-lg'>
+          達成した写真を投稿して
           <br />
           あなたの写真を記録しよう
         </p>

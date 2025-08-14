@@ -1,7 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import { Mypage } from '@/components/mypage'
+import { Mypage } from '@/components/page/mypage'
 import { getViewer } from '@/lib/viewer'
 
 export default async function MypagePage() {
@@ -11,5 +11,5 @@ export default async function MypagePage() {
     redirect('/signin')
   }
 
-  return <Mypage user={viewer.user} />
+  return <Mypage user={viewer.user} isSubscription={viewer.isSubscription} />
 }

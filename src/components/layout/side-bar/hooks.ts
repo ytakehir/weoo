@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { checkoutSubscribe } from '@/lib/stripe/subscription'
 import { createMissionSubmissions } from '@/lib/supabase/actions/mission'
 
 export type MissionForm = {
@@ -38,6 +39,12 @@ export const useMissionForm = () => {
     }
   }
 
+  const handleSubscribe = async () => {
+    startTransition(async () => {
+      checkoutSubscribe(7)
+    })
+  }
+
   const handlePortal = async () => {
     startTransition(async () => {
       try {
@@ -61,6 +68,7 @@ export const useMissionForm = () => {
     setIsSubmitted,
     methods,
     onSubmit,
-    handlePortal
+    handlePortal,
+    handleSubscribe
   }
 }

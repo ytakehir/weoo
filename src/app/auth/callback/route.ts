@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   let next = searchParams.get('next') ?? '/'
+  const plan = searchParams.get('plan') ?? 'free'
   if (!next.startsWith('/')) next = '/'
 
   const origin = request.headers.get('origin') ?? process.env.NEXT_PUBLIC_BASE_URL ?? ''
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
 
   const subscribed = await hasActiveSubscription()
 
-  if (!subscribed) {
+  if (plan === 'pro' && !subscribed) {
     const priceId = process.env.NEXT_PUBLIC_STRIPE_PRO_SUBSCRIBE_PRICE_ID
     if (!priceId) return NextResponse.redirect(`${origin}/error`)
 

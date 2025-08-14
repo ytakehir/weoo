@@ -3,16 +3,20 @@
 import type { User } from '@supabase/supabase-js'
 import { useEffect, useReducer, useState } from 'react'
 import { MyShowcase } from '@/components/card/my-showcase'
+import { checkoutSubscribe } from '@/lib/stripe/subscription'
 import { getPostsByUser, type PostWithPage } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
+import { PlanModal } from '../modal/plan-modal'
 
 type Props = {
   user: User | null
+  isSubscription: boolean
 }
 
-export function Mypage({ user }: Props) {
+export function Mypage({ user, isSubscription }: Props) {
   const [isLatest, setIsLatest] = useState<boolean>(true)
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'calendar'>('list')
+  const [isOpen, setIsOpen] = useState<boolean>(true)
   const [posts, setPosts] = useState<PostWithPage>()
   const [state, dispatch] = useReducer(
     (state, action) => {
@@ -42,12 +46,16 @@ export function Mypage({ user }: Props) {
 
   return (
     <div className='flex w-[90%] flex-col items-center justify-start'>
+      {isOpen && user && !isSubscription && (
+        <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={() => checkoutSubscribe(7)} />
+      )}
       <MyShowcase
         posts={posts?.items}
         isLatest={isLatest}
         onLatest={() => setIsLatest(!isLatest)}
         viewMode={viewMode}
         onViewMode={(mode) => setViewMode(mode)}
+        isSubscription={isSubscription}
       />
       {posts && posts.items.length > 0 && viewMode !== 'calendar' && (
         <div className='join mt-20 grid grid-cols-2'>

@@ -32,7 +32,10 @@ export type PostWithPage = {
 const POST_SELECT = '*, mission:missions(*), profile:profiles(id, display_name, avatar_url)'
 
 // 署名URLを一括付与
-async function attachSignedUrls(rows: PostWithRelations[], expiresInSec = 60 * 5): Promise<PostWithRelationsAndUrl[]> {
+const attachSignedUrls = async (
+  rows: PostWithRelations[],
+  expiresInSec = 60 * 5
+): Promise<PostWithRelationsAndUrl[]> => {
   if (!rows.length) return []
 
   const supabase = await createClient()
@@ -57,18 +60,18 @@ async function attachSignedUrls(rows: PostWithRelations[], expiresInSec = 60 * 5
 }
 
 // 共通：ページメタ生成
-function buildPageMeta(total: number, page: number, limit: number) {
+const buildPageMeta = (total: number, page: number, limit: number) => {
   const totalPages = total ? Math.ceil(total / limit) : 0
   const hasMore = total ? (page - 1) * limit + limit < total : false
   return { total, page, limit, totalPages, hasMore }
 }
 
 // 一覧（新着順）
-export async function getPosts(
+export const getPosts = async (
   page = 1,
   limit = 30,
   opts?: { expiresInSec?: number }
-): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> {
+): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> => {
   const supabase = await createClient()
   const from = (page - 1) * limit
   const to = from + limit - 1
@@ -87,13 +90,13 @@ export async function getPosts(
 }
 
 // ユーザー別
-export async function getPostsByUser(
+export const getPostsByUser = async (
   userId: string,
   sort: 'asc' | 'desc' = 'desc',
   page = 1,
   limit = 30,
   opts?: { expiresInSec?: number }
-): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> {
+): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> => {
   const supabase = await createClient()
   const from = (page - 1) * limit
   const to = from + limit - 1
@@ -113,13 +116,13 @@ export async function getPostsByUser(
 }
 
 // ミッション別
-export async function getPostsByMission(
+export const getPostsByMission = async (
   missionId: string,
   sort: 'asc' | 'desc' = 'desc',
   page = 1,
   limit = 30,
   opts?: { expiresInSec?: number }
-): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> {
+): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> => {
   const supabase = await createClient()
   const from = (page - 1) * limit
   const to = from + limit - 1
@@ -139,7 +142,7 @@ export async function getPostsByMission(
 }
 
 // 作成
-export async function createPost(input: { userId: string; missionId: string; imageUrl: string }): Promise<PostRow> {
+export const createPost = async (input: { userId: string; missionId: string; imageUrl: string }): Promise<PostRow> => {
   const supabase = await createClient()
   const payload: PostInsert = {
     profile_id: input.userId,
@@ -154,10 +157,10 @@ export async function createPost(input: { userId: string; missionId: string; ima
 }
 
 // 更新
-export async function updatePost(
+export const updatePost = async (
   id: string,
   updates: Partial<Omit<PostRow, 'id' | 'created_at' | 'updated_at'>>
-): Promise<PostRow | null> {
+): Promise<PostRow | null> => {
   const supabase = await createClient()
   const patch: PostUpdate = {}
 
@@ -171,9 +174,23 @@ export async function updatePost(
 }
 
 // 削除
-export async function deletePost(id: string): Promise<boolean> {
+export const deletePost = async (id: string): Promise<boolean> => {
   const supabase = await createClient()
   const { error } = await supabase.from('posts').delete().eq('id', id)
   if (error) throw error
   return true
+}
+
+export const getPostsTotalCount = async () => {
+  const sb = await createClient()
+  const { data, error } = await sb.rpc('posts_count_total')
+  if (error) throw error
+  return data as number
+}
+
+export const getPostsCountByMission = async (missionId: string) => {
+  const sb = await createClient()
+  const { data, error } = await sb.rpc('posts_count_by_mission', { post_mission_id: missionId })
+  if (error) throw error
+  return data as number
 }

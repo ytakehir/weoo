@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { fn } from 'storybook/test'
 import * as z from 'zod'
-import { ContactForm } from '@/components/contact/contact-form'
-import type { ContactForm as ContactFormType } from '@/components/contact/type'
+import { ContactForm } from '@/components/page/contact/contact-form'
+import type { ContactForm as ContactFormType } from '@/components/page/contact/type'
 
 const meta: Meta<typeof ContactForm> = {
   component: ContactForm

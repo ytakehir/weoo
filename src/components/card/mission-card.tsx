@@ -13,7 +13,7 @@ export function MissionCard({ mission, onClickMission }: Props) {
           </h2>
           <label
             htmlFor='mission'
-            className='card-actions btn btn-link relative items-center justify-center no-underline'
+            className='card-actions btn btn-link relative w-full items-center justify-center no-underline'
           >
             <input
               type='file'

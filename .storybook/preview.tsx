@@ -1,6 +1,7 @@
 import type { Preview, ReactRenderer } from '@storybook/nextjs-vite'
 import '../src/styles/globals.css'
 import { withThemeByDataAttribute } from '@storybook/addon-themes'
+import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 import { themes } from './themes'
 
 const preview: Preview = {
@@ -19,15 +20,24 @@ const preview: Preview = {
       values: [
         {
           name: 'custom',
-          value: '#fefefe' // 固定したい背景色（白、黒、灰色など）
+          value: '#fefefe'
         }
       ]
+    },
+    viewport: {
+      options: INITIAL_VIEWPORTS
     }
+  },
+  initialGlobals: {
+    viewport: [
+      { value: 'iPhone 12', isRotated: false },
+      { value: 'iPhone 14', isRotated: false }
+    ]
   },
   decorators: [
     withThemeByDataAttribute<ReactRenderer>({
       themes: Object.fromEntries(themes.map((t: string) => [t, t])),
-      defaultTheme: 'light',
+      defaultTheme: 'emerald',
       attributeName: 'data-theme'
     }),
     (Story) => {

@@ -18,7 +18,7 @@ import { OAuthButtons } from './oauth-buttons'
 //   )
 // }
 
-export function SignIn() {
+export function SignIn({ plan }: { plan: 'free' | 'pro' }) {
   // const initialState: EmailSignInState = { ok: false }
   // const [state, formAction] = useActionState(emailSignIn, initialState)
 
@@ -37,12 +37,14 @@ export function SignIn() {
               <br />
               サインインしてください
             </p>
-            <p className='text-base-content/70 text-sm'>※ログイン後自動で決済画面に遷移します</p>
+            <p className='text-base-content/70 text-sm'>
+              ※サブスクを選択された方は、ログイン後自動で決済画面に遷移します
+            </p>
           </div>
         </div>
 
         <div className='flex w-full flex-col items-center justify-center'>
-          <OAuthButtons />
+          <OAuthButtons plan={plan} />
 
           {/* <div className='divider'>OR</div>
 

@@ -1,5 +1,5 @@
 import { Noto_Sans_JP } from 'next/font/google'
-import { Contact } from '@/components/contact'
+import { Contact } from '@/components/page/contact'
 
 const notosan = Noto_Sans_JP({
   weight: '500',

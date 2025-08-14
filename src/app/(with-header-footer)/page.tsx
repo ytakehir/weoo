@@ -1,12 +1,14 @@
 'use server'
 
-import { Home } from '@/components/home'
-import { getOrPickTodayMission } from '@/lib/supabase/actions/mission'
+import { Home } from '@/components/page/home'
+import { getWeekMissions } from '@/lib/supabase/actions/mission'
 import { getViewer } from '@/lib/viewer'
 
 export default async function HomePage() {
   const viewer = await getViewer()
-  const mission = await getOrPickTodayMission()
+  const missions = await getWeekMissions()
 
-  return <Home user={viewer.user} mission={mission} isSubscription={viewer.isSubscription} />
+  return (
+    <Home user={viewer.user} missions={missions} isSubscription={viewer.isSubscription} freeTrail={viewer.freeTrail} />
+  )
 }

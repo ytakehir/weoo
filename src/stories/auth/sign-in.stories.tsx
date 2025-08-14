@@ -9,6 +9,6 @@ export default meta
 
 export const Default: StoryObj<typeof SignIn> = {
   render: () => {
-    return <SignIn />
+    return <SignIn plan={'free'}/>
   }
 }

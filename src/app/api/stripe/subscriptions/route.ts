@@ -1,14 +1,17 @@
 import { headers } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe/server'
+import { getMyStripeCustomerId } from '@/lib/supabase/actions/profile'
 
 export async function POST(req: NextRequest) {
   try {
     const headersList = await headers()
     const origin = headersList.get('origin')
-    const { priceId, customerId } = await req.json()
+    const { priceId, trialPeriodDays } = await req.json()
+    const customerId = await getMyStripeCustomerId()
 
-    if (!priceId || !customerId) return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 })
+    if (!priceId || !trialPeriodDays || !customerId)
+      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 })
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -20,7 +23,7 @@ export async function POST(req: NextRequest) {
       customer_update: { address: 'auto' },
       success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/`,
-      subscription_data: { trial_period_days: 14 }
+      subscription_data: { trial_period_days: trialPeriodDays }
     })
     return NextResponse.json({ sessionId: session.id, sessionUrl: session.url }, { status: 200 })
     // biome-ignore lint/suspicious/noExplicitAny: try-catch

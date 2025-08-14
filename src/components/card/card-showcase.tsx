@@ -10,13 +10,14 @@ type Props = {
   user: User | null
   mission?: string
   posts?: PostWithRelationsAndUrl[]
+  postCount: number
   isLatest: boolean
   onLatest: () => void
   isPosted: boolean
   isSubscription: boolean
 }
 
-export function CardShowcase({ user, mission, posts, isLatest, onLatest, isPosted, isSubscription }: Props) {
+export function CardShowcase({ user, mission, posts, postCount, isLatest, onLatest, isPosted, isSubscription }: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -33,7 +34,7 @@ export function CardShowcase({ user, mission, posts, isLatest, onLatest, isPoste
         </h2>
       </div>
       <h3 className='mt-2 mb-7 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
-        <span className='text-3xl'>{posts?.length ?? 0}</span>この投稿
+        <span className='text-3xl'>{postCount ?? 0}</span>この投稿
       </h3>
       {isPosted && isSubscription ? (
         posts && posts.length > 0 ? (
@@ -144,7 +145,7 @@ export function CardShowcase({ user, mission, posts, isLatest, onLatest, isPoste
                 <div className='modal-box w-[85%] bg-transparent p-0 shadow-none'>
                   <div className='carousel w-full gap-x-8 rounded-box'>
                     {posts.map((post, i) => (
-                      <div className='carousel-item w-full' id={`item${i}`}>
+                      <div key={post.id} className='carousel-item w-full' id={`item${i}`}>
                         <div className='card flex aspect-[3/4] w-full flex-col'>
                           <div className='relative aspect-[3/4] w-full'>
                             <Image
@@ -177,15 +178,15 @@ export function CardShowcase({ user, mission, posts, isLatest, onLatest, isPoste
             )}
           </>
         ) : (
-          <p className='flex items-center justify-center py-20 font-semibold text-base-content/70 text-lg'>
-            まだ投稿がないみたい、、
+          <p className='flex items-center justify-center py-20 text-center font-semibold text-base-content/70 text-lg'>
+            まだ投稿がないみたい...
             <br />
             一番のりで投稿しよう！
           </p>
         )
       ) : (
-        <p className='flex items-center justify-center py-20 font-semibold text-base-content/70 text-lg'>
-          達成した写真を投稿して、
+        <p className='flex items-center justify-center py-20 text-center font-semibold text-base-content/70 text-lg'>
+          達成した写真を投稿して
           <br />
           みんなの投稿をみよう
         </p>
