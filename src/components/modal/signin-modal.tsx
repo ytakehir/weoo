@@ -23,8 +23,8 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
             <X className='size-4 text-base-content/70' />
           </button>
         </form>
-        <div className='flex w-full items-center justify-center rounded-t-box bg-primary'>
-          <Image src={'/logo.png'} alt='logo' width={256} height={256} />
+        <div className='flex w-full items-center justify-center rounded-t-box bg-primary py-6'>
+          <Image src={'/logo.png'} alt='logo' width={128} height={128} />
         </div>
         <div className='flex flex-col items-center justify-center p-6'>
           <h3 className='text-center font-bold text-lg'>
@@ -39,10 +39,6 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
             </li>
             <li>
               <Check className='me-2 inline-block size-4 text-success' />
-              <span className='text-base-content'>一週間（月〜日）のお題にいつでも投稿できる</span>
-            </li>
-            <li>
-              <Check className='me-2 inline-block size-4 text-success' />
               <span className='text-base-content'>みんなの写真が見れる</span>
             </li>
             <li>
@@ -52,6 +48,10 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
 
             <li className='text-center'>
               <span className='text-base-content/50'>有料プラン限定</span>
+            </li>
+            <li>
+              <Sparkles className='me-2 inline-block size-4 text-warning' />
+              <span className='text-base-content'>一週間（月〜日）のお題にいつでも投稿できる</span>
             </li>
             <li>
               <Sparkles className='me-2 inline-block size-4 text-warning' />

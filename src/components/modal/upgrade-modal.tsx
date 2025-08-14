@@ -41,6 +41,10 @@ export function UpgradeModal({ isOpen, onIsOpen, onSubscribe, trailEndDate }: Pr
             </li>
             <li>
               <Sparkles className='me-2 inline-block size-4 text-warning' />
+              <span className='text-base-content'>一週間（月〜日）のお題にいつでも投稿できる</span>
+            </li>
+            <li>
+              <Sparkles className='me-2 inline-block size-4 text-warning' />
               <span className='text-base-content'>達成したお題をカレンダー形式で閲覧できる</span>
             </li>
           </ul>

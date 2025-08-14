@@ -5,6 +5,7 @@ import { A11y, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { differenceInCalendarDays } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useReducer, useState, useTransition } from 'react'
@@ -122,14 +123,18 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           onSignin={() => router.push('/signin')}
         />
       )}
-      {isOpen && user && !isSubscription && (
-        <UpgradeModal
-          isOpen={isOpen}
-          onIsOpen={() => setIsOpen(!true)}
-          onSubscribe={() => checkoutSubscribe(7)}
-          trailEndDate={freeTrail.endDate}
-        />
-      )}
+      {isOpen &&
+        user &&
+        freeTrail.isActive &&
+        differenceInCalendarDays(freeTrail.endDate, new Date()) <= 3 &&
+        !isSubscription && (
+          <UpgradeModal
+            isOpen={isOpen}
+            onIsOpen={() => setIsOpen(!true)}
+            onSubscribe={() => checkoutSubscribe(7)}
+            trailEndDate={freeTrail.endDate}
+          />
+        )}
       <div className='flex w-[90%] flex-col items-center justify-center'>
         {!user && (
           <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
