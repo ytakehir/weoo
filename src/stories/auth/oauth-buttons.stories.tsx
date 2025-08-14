@@ -9,6 +9,6 @@ export default meta
 
 export const Default: StoryObj<typeof OAuthButtons> = {
   render: () => {
-    return <OAuthButtons plan={'free'}/>
+    return <OAuthButtons plan={'free'} />
   }
 }
