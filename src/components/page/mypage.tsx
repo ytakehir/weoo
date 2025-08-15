@@ -47,7 +47,7 @@ export function Mypage({ user, isSubscription }: Props) {
   return (
     <div className='flex w-[90%] flex-col items-center justify-start'>
       {isOpen && user && !isSubscription && (
-        <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={() => checkoutSubscribe(7)} />
+        <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!isOpen)} onSubscribe={() => checkoutSubscribe(30)} />
       )}
       <MyShowcase
         posts={posts?.items}

@@ -67,7 +67,7 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
           </button>
           <div
             className='tooltip tooltip-bottom tooltip-open tooltip-neutral mt-2 mb-10 w-full drop-shadow-md before:p-2 before:text-xs'
-            data-tip='期間限定 2週間無料✨'
+            data-tip='期間限定 60日間無料✨'
           >
             <button type='button' className='btn btn-primary w-full' onClick={onSubscribe}>
               月額500円で始める

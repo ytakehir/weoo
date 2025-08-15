@@ -46,7 +46,7 @@ export async function GET(request: Request) {
       customer_update: { address: 'auto' },
       success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/`,
-      subscription_data: { trial_period_days: 14 }
+      subscription_data: { trial_period_days: 60 }
     })
 
     if (!session.url) return NextResponse.redirect(`${origin}/error`)

@@ -41,7 +41,7 @@ export const useMissionForm = () => {
 
   const handleSubscribe = async () => {
     startTransition(async () => {
-      checkoutSubscribe(7)
+      checkoutSubscribe(30)
     })
   }
 

@@ -75,29 +75,29 @@ export function SideBar({ isSubscription }: Props) {
                   <button type='button' className='link link-error link-hover' onClick={() => handlePortal()}>
                     <div className='flex items-center gap-x-5'>
                       <LogOut className='size-4' />
-                      Unsubscribe
+                      サブスクを解約する
                     </div>
                   </button>
                 ) : (
                   <div
-                    className='tooltip tooltip-right tooltip-open tooltip-neutral w-fit drop-shadow-md before:p-2 before:text-xs'
-                    data-tip='追加 1週間無料✨'
+                    className='tooltip tooltip-right tooltip-open tooltip-neutral w-fit pr-0 drop-shadow-md before:p-2 before:text-xs'
+                    data-tip='追加 1ヶ月無料✨'
                   >
                     <button type='button' className='link link-primary link-hover' onClick={() => handleSubscribe()}>
                       <div className='flex items-center gap-x-5'>
                         <LogIn className='size-4' />
-                        Subscribe
+                        サブスクに加入する
                       </div>
                     </button>
                   </div>
                 )}
               </li>
             </nav>
-            <div className='flex flex-col items-center justify-center gap-y-10'>
+            <div className='flex flex-col items-center justify-center gap-y-5'>
               <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className='fieldset size-full rounded-box border border-base-300 bg-base-200 p-4'>
                   <fieldset className='fieldset'>
-                    <legend className='fieldset-legend'>💡お題を考えよう！</legend>
+                    <legend className='fieldset-legend'>💡2人以上でやりたくなるお題を考えよう！</legend>
                     <input
                       type='text'
                       className='input validator'

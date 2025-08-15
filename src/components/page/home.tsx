@@ -5,7 +5,8 @@ import { A11y, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays, format, isToday, isYesterday } from 'date-fns'
+import { ja } from 'date-fns/locale/ja'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useReducer, useState, useTransition } from 'react'
@@ -18,6 +19,7 @@ import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/tailwind'
 import type { Viewer } from '@/types/viewer'
 import { CardBack } from '../card/card-back'
+import { PlanModal } from '../modal/plan-modal'
 import { SigninModal } from '../modal/signin-modal'
 import { UpgradeModal } from '../modal/upgrade-modal'
 
@@ -37,6 +39,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
   const [isLatest, setIsLatest] = useState<boolean>(true)
   const [isPosted, setIsPosted] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(true)
+  const [isOpenPlanModal, setIsOpenPlanModal] = useState<boolean>(false)
   const [posts, setPosts] = useState<PostWithPage>()
   const [isPending, startTransition] = useTransition()
   const [state, dispatch] = useReducer(
@@ -125,25 +128,47 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
     }
   }, [isPending])
 
+  const judgeDate = () => {
+    const usedAt = missions?.[active]?.used_at
+  if (!usedAt) return '今日'
+
+  const date = new Date(usedAt)
+    switch (true) {
+      case isToday(date):
+        return '今日'
+      case isYesterday(date):
+        return '昨日'
+      default:
+        return format(date, 'E曜日', { locale: ja })
+    }
+  }
+
   return (
     <>
       {isOpen && !user && (
         <SigninModal
           isOpen={isOpen}
-          onIsOpen={() => setIsOpen(!true)}
+          onIsOpen={() => setIsOpen(!isOpen)}
           onSubscribe={() => router.push('/signin?plan=pro')}
           onSignin={() => router.push('/signin')}
+        />
+      )}
+      {isOpen && user && !isSubscription && (
+        <PlanModal
+          isOpen={isOpenPlanModal}
+          onIsOpen={() => setIsOpenPlanModal(!isOpen)}
+          onSubscribe={() => checkoutSubscribe(30)}
         />
       )}
       {isOpen &&
         user &&
         freeTrail.isActive &&
-        differenceInCalendarDays(freeTrail.endDate, new Date()) <= 3 &&
+        differenceInCalendarDays(freeTrail.endDate, new Date()) <= 7 &&
         !isSubscription && (
           <UpgradeModal
             isOpen={isOpen}
-            onIsOpen={() => setIsOpen(!true)}
-            onSubscribe={() => checkoutSubscribe(7)}
+            onIsOpen={() => setIsOpen(!isOpen)}
+            onSubscribe={() => checkoutSubscribe(30)}
             trailEndDate={freeTrail.endDate}
           />
         )}
@@ -154,7 +179,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           </button>
         )}
         {user && !isSubscription && (
-          <button type='button' className='btn btn-link text-base-content' onClick={() => checkoutSubscribe(7)}>
+          <button type='button' className='btn btn-link text-base-content' onClick={() => setIsOpenPlanModal(true)}>
             サブスク登録して過去のお題に参加しよう📮✨
           </button>
         )}
@@ -165,7 +190,9 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
               missions && missions?.length > 1 && (isSubscription || freeTrail.isActive) && 'opacity-100'
             )}
           />
-          <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>今日のお題</h1>
+          <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
+            {judgeDate()}のお題
+          </h1>
           <ChevronRight
             className={cn('size-8 opacity-0', active > 0 && (isSubscription || freeTrail.isActive) && 'opacity-100')}
           />

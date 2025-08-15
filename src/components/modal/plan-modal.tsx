@@ -13,7 +13,6 @@ export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
     <dialog id='plan-modal' className={cn('modal', isOpen && 'modal-open')}>
       <div className='modal-box relative flex flex-col overflow-visible p-0'>
         <form method='dialog'>
-          {/* if there is a button in form, it will close the modal */}
           <button
             type='submit'
             className='btn btn-xs btn-circle -top-2 -right-2 absolute border-none bg-base-100/50'
@@ -49,7 +48,7 @@ export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
               <span className='text-base-content'>達成したお題をカレンダー形式で閲覧できる</span>
             </li>
           </ul>
-          <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='追加 1週間無料✨'>
+          <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='追加 30日間無料✨'>
             <button type='button' className='btn btn-primary w-full' onClick={onSubscribe}>
               月額500円で始める
             </button>

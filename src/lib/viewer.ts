@@ -26,7 +26,7 @@ export const getViewer = cache(async (): Promise<Viewer> => {
     profile: profile ?? null,
     isSubscription: !!sub,
     freeTrail: {
-      isActive: differenceInCalendarDays(profile.free_trial_end, new Date()) <= 7,
+      isActive: differenceInCalendarDays(profile.free_trial_end, new Date()) <= 30,
       endDate: new Date(profile.free_trial_end)
     }
   }
