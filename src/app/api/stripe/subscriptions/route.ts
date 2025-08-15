@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       cancel_url: `${origin}/`,
       subscription_data: { trial_period_days: trialPeriodDays }
     })
-    return NextResponse.json({ sessionId: session.id, sessionUrl: session.url }, { status: 200 })
+    return NextResponse.json({ id: session.id, url: session.url }, { status: 200 })
     // biome-ignore lint/suspicious/noExplicitAny: try-catch
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: error.statusCode || 500 })

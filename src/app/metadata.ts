@@ -18,7 +18,8 @@ export const metadata: Metadata = {
     '放課後の遊び',
     '写真映えスポット',
     'カップル向け',
-    '友達向けアクティビティ'
+    '友達向けアクティビティ',
+    'これから私たちは、'
   ],
   authors: [{ name: 'weoo' }],
   creator: 'weoo',
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
     description:
       '友達や恋人と、毎日ちょっと特別な体験を。weooは、2人以上で挑戦できる「今日のお題」を毎日配信するサービスです。写真を撮って思い出を共有しよう。',
     images: ['https://weoo.jp/og-image.png'],
-    creator: '@weoo_app'
+    creator: '@weoo'
   },
   robots: {
     index: true,
