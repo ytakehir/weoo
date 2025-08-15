@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, CheckCircle, CircleAlert, Clock, Mail, MessageSquare } from 'lucide-react'
+import { ArrowLeft, CheckCircle, CircleAlert, Clock, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { FormProvider } from 'react-hook-form'
 import { ContactForm } from './contact-form'
@@ -66,31 +66,16 @@ export function Contact() {
               <div>
                 <h3 className='mb-1 font-semibold text-base-content'>メールでのお問い合わせ</h3>
                 <p className='mb-2 text-base-content/70 text-sm'>
-                  アカウントや料金、操作方法などに関するご質問はこちら
+                  アカウントや料金、操作方法などに関するご質問はこちらからお願いいたします。
                   <br />
-                  下の「お問い合わせフォーム」からも送信いただけます
+                  下の「お問い合わせフォーム」からも送信いただけます。
                 </p>
+                <p className='mb-2 text-base-content/70 text-sm'>イベント企画やコラボ、メディア取材のご相談もこちらからお願いいたします。</p>
                 <a
                   href={`mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? ''}`}
                   className='font-medium text-primary hover:underline'
                 >
                   {process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? ''}
-                </a>
-              </div>
-            </div>
-
-            <div className='flex items-start space-x-4'>
-              <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10'>
-                <MessageSquare className='h-6 w-6 text-primary' />
-              </div>
-              <div>
-                <h3 className='mb-1 font-semibold text-base-content'>コラボ・取材のご相談</h3>
-                <p className='mb-2 text-base-content/70 text-sm'>イベント企画やコラボ、メディア取材のご相談はこちら</p>
-                <a
-                  href={`mailto:${process.env.NEXT_PUBLIC_SALES_EMAIL ?? ''}`}
-                  className='font-medium text-primary hover:underline'
-                >
-                  {process.env.NEXT_PUBLIC_SALES_EMAIL ?? ''}
                 </a>
               </div>
             </div>

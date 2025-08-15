@@ -47,6 +47,14 @@ export function SideBar({ isSubscription }: Props) {
           <div className='mt-5 flex flex-1 flex-col justify-between'>
             <nav>
               <li>
+                <Link className='link link-hover' href='/mypage'>
+                  <div className='flex items-center gap-x-5'>
+                    <User className='size-4' />
+                    Mypage
+                  </div>
+                </Link>
+              </li>
+              <li>
                 <Link className='link link-hover' href='/contact'>
                   <div className='flex items-center gap-x-5'>
                     <MailQuestionMark className='size-4' />
@@ -109,6 +117,19 @@ export function SideBar({ isSubscription }: Props) {
                   </button>
                 </fieldset>
               </form>
+              <button
+                type='button'
+                className='btn btn-link font-medium text-base-content'
+                onClick={() => {
+                  navigator.share({
+                    title: 'weoo（ウィーオー）',
+                    text: 'シェアしてくれた人と一緒にお題に参加しよう！！',
+                    url: 'https://weoo.jp'
+                  })
+                }}
+              >
+                恋人や友達にシェアしよう👀
+              </button>
               <div className='mb-10 grid grid-flow-col gap-4'>
                 <Link className='flex items-center gap-x-2' href='https://www.tiktok.com/@weoo_official'>
                   <FaTiktok className='size-6' />

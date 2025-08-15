@@ -60,6 +60,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
   }, [posts, user?.id])
 
   const onUpload = async (file: File | null) => {
+    window.scrollTo({ top: 0 })
     startTransition(async () => {
       try {
         if (!file || !mission) return
@@ -113,6 +114,17 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
     }
   }, [active, missions, isLatest])
 
+  useEffect(() => {
+    if (isPending) {
+      document.body.classList.add('overflow-hidden')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+    }
+  }, [isPending])
+
   return (
     <>
       {isOpen && !user && (
@@ -135,7 +147,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
             trailEndDate={freeTrail.endDate}
           />
         )}
-      <div className='flex w-[90%] flex-col items-center justify-center'>
+      <div className={cn('flex w-[90%] flex-col items-center justify-center')}>
         {!user && (
           <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
             会員登録して今日のお題に参加しよう📮✨
@@ -170,7 +182,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
             spaceBetween={'10%'}
           >
             {missions?.map((mission) => (
-              <SwiperSlide key={mission.id} dir='ltr'>
+              <SwiperSlide key={mission.id} dir='ltr' className='w-[99%]'>
                 <MissionCard mission={mission.title} onClickMission={onUpload} />
               </SwiperSlide>
             ))}
@@ -219,7 +231,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
         </div>
       </div>
       {isPending && (
-        <div className='pointer-events-none absolute top-0 left-0 z-1000 flex size-full items-center justify-center bg-black/50'>
+        <div className='pointer-events-auto absolute top-0 left-0 z-1000 flex h-screen w-full items-center justify-center bg-black/50'>
           <span className='loading loading-spinner loading-xl text-primary' />
         </div>
       )}
