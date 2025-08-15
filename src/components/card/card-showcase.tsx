@@ -19,7 +19,17 @@ type Props = {
   freeTrail: Viewer['freeTrail']
 }
 
-export function CardShowcase({ user, mission, posts, postCount, isLatest, onLatest, isPosted, isSubscription, freeTrail }: Props) {
+export function CardShowcase({
+  user,
+  mission,
+  posts,
+  postCount,
+  isLatest,
+  onLatest,
+  isPosted,
+  isSubscription,
+  freeTrail
+}: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -38,7 +48,7 @@ export function CardShowcase({ user, mission, posts, postCount, isLatest, onLate
       <h3 className='mt-2 mb-7 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
         <span className='text-3xl'>{postCount ?? 0}</span>この投稿
       </h3>
-      {(isPosted && (isSubscription || freeTrail.isActive)) ? (
+      {isPosted && (isSubscription || freeTrail.isActive) ? (
         posts && posts.length > 0 ? (
           <>
             <div className='mb-5 flex w-full items-center justify-end gap-x-4'>
