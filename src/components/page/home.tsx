@@ -130,9 +130,9 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
 
   const judgeDate = () => {
     const usedAt = missions?.[active]?.used_at
-  if (!usedAt) return '今日'
+    if (!usedAt) return '今日'
 
-  const date = new Date(usedAt)
+    const date = new Date(usedAt)
     switch (true) {
       case isToday(date):
         return '今日'
