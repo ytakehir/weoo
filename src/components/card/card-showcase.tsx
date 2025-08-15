@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
+import type { Viewer } from '@/types/viewer'
 
 type Props = {
   user: User | null
@@ -15,9 +16,10 @@ type Props = {
   onLatest: () => void
   isPosted: boolean
   isSubscription: boolean
+  freeTrail: Viewer['freeTrail']
 }
 
-export function CardShowcase({ user, mission, posts, postCount, isLatest, onLatest, isPosted, isSubscription }: Props) {
+export function CardShowcase({ user, mission, posts, postCount, isLatest, onLatest, isPosted, isSubscription, freeTrail }: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -36,7 +38,7 @@ export function CardShowcase({ user, mission, posts, postCount, isLatest, onLate
       <h3 className='mt-2 mb-7 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
         <span className='text-3xl'>{postCount ?? 0}</span>この投稿
       </h3>
-      {isPosted && isSubscription ? (
+      {(isPosted && (isSubscription || freeTrail.isActive)) ? (
         posts && posts.length > 0 ? (
           <>
             <div className='mb-5 flex w-full items-center justify-end gap-x-4'>

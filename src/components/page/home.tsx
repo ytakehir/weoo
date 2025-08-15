@@ -205,6 +205,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
             onLatest={() => setIsLatest(!isLatest)}
             isPosted={isPosted}
             isSubscription={isSubscription}
+            freeTrail={freeTrail}
           />
           {posts && posts.items.length > 0 && (
             <div className='join mt-20 grid grid-cols-2'>
