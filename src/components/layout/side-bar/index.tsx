@@ -71,7 +71,7 @@ export function SideBar({ isSubscription }: Props) {
                 </Link>
               </li>
               <li>
-                {isSubscription ? (
+                {!isSubscription ? (
                   <button type='button' className='link link-error link-hover' onClick={() => handlePortal()}>
                     <div className='flex items-center gap-x-5'>
                       <LogOut className='size-4' />
@@ -80,8 +80,8 @@ export function SideBar({ isSubscription }: Props) {
                   </button>
                 ) : (
                   <div
-                    className='tooltip tooltip-right tooltip-open tooltip-neutral w-fit pr-0 drop-shadow-md before:p-2 before:text-xs'
-                    data-tip='追加 1ヶ月無料✨'
+                    className='tooltip tooltip-right tooltip-open tooltip-neutral w-fit pr-0 drop-shadow-md before:p-1 before:text-xs'
+                    data-tip='追加 30日間無料✨'
                   >
                     <button type='button' className='link link-primary link-hover' onClick={() => handleSubscribe()}>
                       <div className='flex items-center gap-x-5'>

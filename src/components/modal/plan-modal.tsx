@@ -33,7 +33,7 @@ export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
           <ul className='mt-6 flex flex-col gap-y-1 text-xs leading-relaxed'>
             <li>
               <Sparkles className='me-2 inline-block size-4 text-warning' />
-              <span className='text-base-content'>追加で1週間無料で利用できる</span>
+              <span className='text-base-content'>追加で30日間無料で利用できる</span>
             </li>
             <li>
               <Sparkles className='me-2 inline-block size-4 text-warning' />

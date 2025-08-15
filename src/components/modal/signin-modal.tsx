@@ -63,7 +63,7 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
             </li>
           </ul>
           <button type='button' className='btn btn-neutral btn-soft mt-5 w-full' onClick={onSignin}>
-            1週間無料で体験する（会員登録のみ）
+            30日間無料で体験する（会員登録のみ）
           </button>
           <div
             className='tooltip tooltip-bottom tooltip-open tooltip-neutral mt-2 mb-10 w-full drop-shadow-md before:p-2 before:text-xs'
