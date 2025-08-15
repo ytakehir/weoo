@@ -70,7 +70,9 @@ export function Contact() {
                   <br />
                   下の「お問い合わせフォーム」からも送信いただけます。
                 </p>
-                <p className='mb-2 text-base-content/70 text-sm'>イベント企画やコラボ、メディア取材のご相談もこちらからお願いいたします。</p>
+                <p className='mb-2 text-base-content/70 text-sm'>
+                  イベント企画やコラボ、メディア取材のご相談もこちらからお願いいたします。
+                </p>
                 <a
                   href={`mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? ''}`}
                   className='font-medium text-primary hover:underline'
