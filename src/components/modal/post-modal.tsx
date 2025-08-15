@@ -9,12 +9,11 @@ type Props = {
   trailEndDate: Date
 }
 
-export function UpgradeModal({ isOpen, onIsOpen, onSubscribe, trailEndDate }: Props) {
+export function PostModal({ isOpen, onIsOpen, onSubscribe, trailEndDate }: Props) {
   return (
     <dialog id='plan-modal' className={cn('modal', isOpen && 'modal-open')}>
       <div className='modal-box relative flex flex-col overflow-visible bg-[color-mix(in_srgb,var(--color-primary)_25%,white)] p-0'>
         <form method='dialog'>
-          {/* if there is a button in form, it will close the modal */}
           <button
             type='submit'
             className='btn btn-xs btn-circle -top-2 -right-2 absolute border-none bg-base-100/50'

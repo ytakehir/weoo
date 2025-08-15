@@ -71,7 +71,7 @@ export function SideBar({ isSubscription }: Props) {
                 </Link>
               </li>
               <li>
-                {!isSubscription ? (
+                {isSubscription ? (
                   <button type='button' className='link link-error link-hover' onClick={() => handlePortal()}>
                     <div className='flex items-center gap-x-5'>
                       <LogOut className='size-4' />
