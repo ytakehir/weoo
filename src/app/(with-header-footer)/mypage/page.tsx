@@ -7,7 +7,7 @@ import { getViewer } from '@/lib/viewer'
 export default async function MypagePage() {
   const viewer = await getViewer()
 
-  if (!viewer.isSubscription) {
+  if (!viewer.user) {
     redirect('/signin')
   }
 

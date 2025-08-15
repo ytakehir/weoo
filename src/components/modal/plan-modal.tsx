@@ -42,6 +42,10 @@ export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
             </li>
             <li>
               <Sparkles className='me-2 inline-block size-4 text-warning' />
+              <span className='text-base-content'>投稿しなくてもみんなの投稿が見える</span>
+            </li>
+            <li>
+              <Sparkles className='me-2 inline-block size-4 text-warning' />
               <span className='text-base-content'>達成したお題をカレンダー形式で閲覧できる</span>
             </li>
           </ul>
