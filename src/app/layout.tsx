@@ -2,12 +2,19 @@ import { cn } from '@/lib/tailwind'
 import '@/styles/globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import type { Viewport } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 
 const notosan = Noto_Sans_JP({
   weight: '500',
   subsets: ['latin']
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1
+}
 
 export default function RootLayout({
   children
