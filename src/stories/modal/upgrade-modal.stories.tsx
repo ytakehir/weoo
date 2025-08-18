@@ -17,7 +17,7 @@ export const Default: StoryObj<typeof UpgradeModal> = {
     return (
       <UpgradeModal
         isOpen={isOpen}
-        onIsOpen={() => setIsOpen(!true)}
+        onIsOpen={() => setIsOpen(!isOpen)}
         onSubscribe={fn()}
         trailEndDate={addDays(new Date(), 7)}
       />

@@ -13,6 +13,6 @@ export const Default: StoryObj<typeof PostModal> = {
   render: () => {
     const [isOpen, setIsOpen] = useState<boolean>(true)
 
-    return <PostModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} mission='' onSubmit={fn()} />
+    return <PostModal isOpen={isOpen} onIsOpen={() => setIsOpen(!isOpen)} onSubmit={fn()} />
   }
 }

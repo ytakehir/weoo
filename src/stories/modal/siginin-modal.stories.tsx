@@ -13,6 +13,6 @@ export const Default: StoryObj<typeof SigninModal> = {
   render: () => {
     const [isOpen, setIsOpen] = useState<boolean>(true)
 
-    return <SigninModal isOpen={isOpen} onIsOpen={() => setIsOpen(!true)} onSubscribe={fn()} onSignin={fn()} />
+    return <SigninModal isOpen={isOpen} onIsOpen={() => setIsOpen(!isOpen)} onSubscribe={fn()} onSignin={fn()} />
   }
 }
