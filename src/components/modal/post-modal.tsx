@@ -9,11 +9,10 @@ import type { PostForm } from '../page/home/hooks'
 type Props = {
   isOpen: boolean
   onIsOpen: () => void
-  mission: string
   onSubmit: (data: PostForm) => void
 }
 
-export function PostModal({ isOpen, onIsOpen, mission, onSubmit }: Props) {
+export function PostModal({ isOpen, onIsOpen, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
@@ -35,11 +34,11 @@ export function PostModal({ isOpen, onIsOpen, mission, onSubmit }: Props) {
         </form>
         <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col items-center justify-center gap-y-4 p-6'>
-            <h3 className='text-center font-bold text-lg'>
+            {/* <h3 className='text-center font-bold text-lg'>
               「{mission}」
               <br />
               に投稿する📮
-            </h3>
+            </h3> */}
             <div className={'card relative flex aspect-[3/4] w-full flex-col items-center'}>
               <div className='card-body absolute inset-0 flex flex-col justify-between gap-0 p-0'>
                 <div className='relative flex flex-1 items-center justify-center'>
@@ -98,7 +97,7 @@ export function PostModal({ isOpen, onIsOpen, mission, onSubmit }: Props) {
               {errors.caption && <p className='validator-hint'>{errors.caption.message}</p>}
               <div className='flex w-full items-center justify-start gap-x-2'>
                 <input type='checkbox' className='checkbox checkbox-neutral checkbox-xs' {...register('isPublic')} />
-                <p className='w-full justify-end text-left text-base-content/70 text-xs'>
+                <p className='w-full text-base-content/70 text-xs'>
                   <a
                     className='link link-info mr-1'
                     href='https://www.tiktok.com/@weoo_official'
@@ -110,12 +109,8 @@ export function PostModal({ isOpen, onIsOpen, mission, onSubmit }: Props) {
                   への掲載を許可する
                 </p>
               </div>
-              <p className='w-full justify-end text-left text-base-content/70 text-xs'>
-                ※ キャプションは20文字までです
-              </p>
-              <p className='text-center text-base-content/70 text-xs'>
-                ⚠️ 各種SNSのアカウントなどの記載は禁止しています
-              </p>
+              <p className='w-full text-base-content/70 text-xs'>※ キャプションは20文字までです</p>
+              <p className='w-full text-base-content/70 text-xs'>⚠️ 各種SNSのアカウントなどの記載は禁止しています</p>
             </div>
             <button type='submit' className='btn btn-neutral btn-wide mt-4' disabled={!photo || isSubmitting}>
               {isSubmitting ? (

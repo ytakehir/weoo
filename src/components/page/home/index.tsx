@@ -87,7 +87,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           <PostModal
             isOpen={isOpenPostModal}
             onIsOpen={() => setIsOpenPostModal(!isOpenPostModal)}
-            mission={mission?.title.replace(/\\n/g, '') ?? ''}
+            // mission={mission?.title.replace(/\\n/g, '') ?? ''}
             onSubmit={onSubmit}
           />
         </FormProvider>
