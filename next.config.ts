@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'pyczzkmwevupfiphktwc.supabase.co',
         pathname: '/storage/v1/object/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        pathname: '/npm/emoji-datasource-apple/**'
       }
     ],
     minimumCacheTTL: 60

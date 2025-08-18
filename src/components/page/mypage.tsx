@@ -50,6 +50,7 @@ export function Mypage({ user, isSubscription }: Props) {
         <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!isOpen)} onSubscribe={() => checkoutSubscribe(30)} />
       )}
       <MyShowcase
+        user={user}
         posts={posts?.items}
         isLatest={isLatest}
         onLatest={() => setIsLatest(!isLatest)}

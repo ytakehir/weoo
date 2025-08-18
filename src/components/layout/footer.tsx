@@ -26,10 +26,15 @@ export function Footer() {
       </nav>
       <nav>
         <div className='grid grid-flow-col gap-4'>
-          <Link className='flex items-center gap-x-2' href='https://www.tiktok.com/@weoo_official'>
+          <a
+            className='flex items-center gap-x-2'
+            href='https://www.tiktok.com/@weoo_official'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             <FaTiktok className='size-6' />
             <span className='font-semibold text-lg'>TikTok</span>
-          </Link>
+          </a>
         </div>
       </nav>
       <aside>

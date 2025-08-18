@@ -39,7 +39,7 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
             </li>
             <li>
               <Check className='me-2 inline-block size-4 text-success' />
-              <span className='text-base-content'>みんなの写真が見れる</span>
+              <span className='text-base-content'>みんなの写真が見れる・リアクションできる</span>
             </li>
             <li>
               <Check className='me-2 inline-block size-4 text-success' />
@@ -47,7 +47,7 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
             </li>
 
             <li className='text-center'>
-              <span className='text-base-content/50'>有料プラン限定</span>
+              <span className='text-base-content/50'>サブスク限定</span>
             </li>
             <li>
               <Sparkles className='me-2 inline-block size-4 text-warning' />
@@ -63,7 +63,7 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
             </li>
           </ul>
           <button type='button' className='btn btn-neutral btn-soft mt-5 w-full' onClick={onSignin}>
-            30日間無料で体験する（会員登録のみ）
+            無料会員登録（30日間おためし）
           </button>
           <div
             className='tooltip tooltip-bottom tooltip-open tooltip-neutral mt-2 mb-10 w-full drop-shadow-md before:p-2 before:text-xs'
@@ -73,8 +73,13 @@ export function SigninModal({ isOpen, onIsOpen, onSignin, onSubscribe }: Props) 
               月額500円で始める
             </button>
           </div>
-          <p className='mt-2 text-right text-base-content/70 text-xs'>いつでも退会・キャンセル可能</p>
-          <p className='mt-2 text-right text-base-content/70 text-xs'>
+          <p className='mt-2 text-center text-base-content/70 text-xs'>
+            無料会員登録では一切請求は発生しません。
+            <br />
+            （30日後は機能が制限されます）
+          </p>
+          <p className='mt-2 text-center text-base-content/70 text-xs'>いつでも退会・キャンセル可能</p>
+          <p className='mt-2 text-center text-base-content/70 text-xs'>
             期間限定期間終了後は自動で月額500円課金されます。
           </p>
         </div>

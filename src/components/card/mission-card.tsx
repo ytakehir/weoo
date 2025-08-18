@@ -1,6 +1,6 @@
 type Props = {
   mission: string
-  onClickMission: (e: File | null) => void
+  onClickMission: () => void
 }
 
 export function MissionCard({ mission, onClickMission }: Props) {
@@ -11,20 +11,14 @@ export function MissionCard({ mission, onClickMission }: Props) {
           <h2 className='card-title whitespace-pre-line text-left font-semibold text-4xl/relaxed'>
             {mission.replace(/\\n/g, '\n')}
           </h2>
-          <label
-            htmlFor='mission'
+          <button
+            type='button'
             className='card-actions btn btn-link relative w-full items-center justify-center no-underline'
+            onClick={onClickMission}
           >
-            <input
-              type='file'
-              id='mission'
-              accept='image/*'
-              className='hidden'
-              onChange={(e) => onClickMission(e.target.files?.[0] ?? null)}
-            />
             <span className='absolute inline-flex size-2/3 animate-ping rounded-full bg-primary/75' />
             post photo!
-          </label>
+          </button>
         </div>
       </div>
       <div className='card'>

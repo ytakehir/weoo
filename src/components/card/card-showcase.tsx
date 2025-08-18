@@ -1,16 +1,20 @@
 import type { User } from '@supabase/supabase-js'
 import { format } from 'date-fns'
+import EmojiPicker, { type EmojiClickData } from 'emoji-picker-react'
 import { ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
-import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
+import { useRouter } from 'next/navigation'
+import { useRef, useState } from 'react'
+import type { PostWithRelationsUrlAndReactions } from '@/lib/supabase/actions/post'
+import { toggleReaction } from '@/lib/supabase/actions/reaction'
 import { cn } from '@/lib/tailwind'
 import type { Viewer } from '@/types/viewer'
+import { Reaction } from './reaction'
 
 type Props = {
   user: User | null
   mission?: string
-  posts?: PostWithRelationsAndUrl[]
+  posts?: PostWithRelationsUrlAndReactions[]
   postCount: number
   isLatest: boolean
   onLatest: () => void
@@ -30,11 +34,46 @@ export function CardShowcase({
   isSubscription,
   freeTrail
 }: Props) {
+  const router = useRouter()
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [post, setPost] = useState<PostWithRelationsUrlAndReactions>()
+  const lastTap = useRef<number>(0)
+
+  const handleTap = (post: PostWithRelationsUrlAndReactions) => {
+    const now = Date.now()
+    const delta = now - lastTap.current
+    if (delta < 300 && delta > 0) {
+      // 300ms 以内にもう一度タップされたらダブルタップ
+      setPost(post)
+      setIsOpen(true)
+    }
+    lastTap.current = now
+  }
+
+  const handleEmoji = async (emoji: EmojiClickData) => {
+    if (!post?.id) return
+    await toggleReaction(post?.id, emoji.imageUrl)
+    setIsOpen(false)
+    router.refresh()
+  }
 
   return (
     <div className='flex w-full flex-col'>
+      {isOpen && (
+        <dialog id='reaction-modal' className={cn('modal', isOpen && 'modal-open z-1000')}>
+          <EmojiPicker
+            className='modal-box rounded-b-box p-0'
+            searchDisabled
+            reactionsDefaultOpen={true}
+            onEmojiClick={handleEmoji}
+          />
+          <form method='dialog' className='modal-backdrop'>
+            <button type='button' onClick={() => setIsOpen(false)} />
+          </form>
+        </dialog>
+      )}
       <div className='flex w-full items-center gap-x-4 pb-10'>
         <div className='inline-grid *:[grid-area:1/1]'>
           <div className='status status-lg status-accent animate-ping' />
@@ -99,7 +138,7 @@ export function CardShowcase({
                 'w-full',
                 viewMode === 'grid'
                   ? 'grid grid-cols-3 gap-0.5 sm:grid-cols-4 md:grid-cols-5'
-                  : 'grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8'
+                  : 'grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-10'
               )}
             >
               {posts.map((post, i) => (
@@ -116,38 +155,66 @@ export function CardShowcase({
                       {post.profile_id === user?.id && (
                         <span className='indicator-item badge badge-info badge-soft right-12'>あなたの投稿</span>
                       )}
-                      <div className='relative aspect-[3/4] w-full'>
+                      <button
+                        type='button'
+                        className='relative aspect-[3/4] w-full'
+                        onDoubleClick={() => handleTap(post)}
+                        onTouchEnd={() => handleTap(post)}
+                      >
                         <Image
                           className={cn(
-                            '!size-full rounded-box object-cover shadow-sm',
+                            '!size-full pointer-events-none rounded-box object-cover shadow-sm',
                             post.profile_id === user?.id && 'ring-2 ring-info'
                           )}
                           src={post.image_url_signed ?? '/no_image.png'}
                           alt={post.id}
                           fill
+                          priority
                         />
-                      </div>
+                        <div className='absolute bottom-0 left-0 h-20 w-full rounded-b-box bg-gradient-to-t from-black/60 to-transparent' />
 
-                      <div className='card-body w-full items-end gap-0 p-2'>
-                        <p className='text-right text-base-content text-sm'>
+                        <p className='absolute bottom-4 ml-4 text-nowrap text-right font-semibold text-white text-xs'>
+                          {post.caption}
+                        </p>
+                      </button>
+
+                      <div className='card-body flex w-full flex-row items-start justify-between gap-2 p-2'>
+                        {post.reactions.length > 0 && (
+                          <Reaction
+                            postId={post.id}
+                            user={user}
+                            isGroup={false}
+                            reactions={post.reactions}
+                            onReaction={(postId: string, url: string) => {
+                              toggleReaction(postId, url)
+                              router.refresh()
+                            }}
+                          />
+                        )}
+                        <p className='text-nowrap text-right text-base-content text-sm'>
                           {format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}
                         </p>
                       </div>
                     </>
                   )}
                   {viewMode === 'grid' && (
-                    <Image
-                      className='!size-full object-cover'
-                      src={post.image_url_signed ?? '/no_image.png'}
-                      alt={post.id}
-                      fill
+                    <button
+                      type='button'
+                      className='!size-full'
                       onClick={() => {
                         setSelectedIndex(i)
                         setTimeout(() => {
                           location.hash = `#item${i}`
                         }, 0)
                       }}
-                    />
+                    >
+                      <Image
+                        className='!size-full pointer-events-none object-cover'
+                        src={post.image_url_signed ?? '/no_image.png'}
+                        alt={post.id}
+                        fill
+                      />
+                    </button>
                   )}
                 </div>
               ))}
@@ -157,24 +224,39 @@ export function CardShowcase({
                 <div className='modal-box w-[85%] bg-transparent p-0 shadow-none'>
                   <div className='carousel w-full gap-x-8 rounded-box'>
                     {posts.map((post, i) => (
-                      <div key={post.id} className='carousel-item w-full' id={`item${i}`}>
+                      <button
+                        type='button'
+                        key={post.id}
+                        className='carousel-item w-full'
+                        id={`item${i}`}
+                        onDoubleClick={() => handleTap(post)}
+                        onTouchEnd={() => handleTap(post)}
+                      >
                         <div className='card flex aspect-[3/4] w-full flex-col'>
                           <div className='relative aspect-[3/4] w-full'>
                             <Image
-                              className='!size-full rounded-box object-cover shadow-sm'
+                              className='!size-full pointer-events-none rounded-box object-cover shadow-sm'
                               src={post.image_url_signed ?? '/no_image.png'}
                               alt={post.id}
                               fill
                             />
+                            <div className='absolute bottom-0 left-0 h-20 w-full rounded-b-box bg-gradient-to-t from-black/60 to-transparent' />
+
+                            <p className='absolute bottom-4 ml-4 text-nowrap text-right font-semibold text-white text-xs'>
+                              {post.caption}
+                            </p>
                           </div>
 
-                          <div className='card-body gap-0 p-2'>
-                            <p className='text-right font-semibold text-sm'>
+                          <div className='card-body flex w-full flex-row items-start justify-between gap-2 p-2'>
+                            {post.reactions.length > 0 && (
+                              <Reaction postId={post.id} user={user} isGroup reactions={post.reactions} />
+                            )}
+                            <p className='text-nowrap text-right text-sm text-white'>
                               {format(new Date(post.updated_at), 'yyyy/MM/dd HH:mm')}
                             </p>
                           </div>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                   <div className='flex items-center justify-center gap-x-4 pt-5'>

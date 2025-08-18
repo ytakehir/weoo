@@ -97,7 +97,9 @@ export function Contact() {
           <div className='rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6'>
             <h3 className='mb-2 font-semibold text-base-content'>すぐに解決したい場合</h3>
             <p className='mb-4 text-base-content/70 text-sm'>
-              よくある質問ページに、サービスの使い方や料金の詳細をまとめています。
+              FAQページに、サービスの使い方や料金の詳細をまとめています。
+              <br />
+              解約方法なども記載ありますので、ご確認ください。
             </p>
             <Link href='/faq'>
               <button type='button' className='btn btn-outline btn-sm btn-neutral'>

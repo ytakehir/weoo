@@ -98,25 +98,31 @@ export type Database = {
       }
       posts: {
         Row: {
+          caption: string | null
           created_at: string
           id: string
           image_url: string
+          is_public: boolean | null
           mission_id: string
           profile_id: string
           updated_at: string
         }
         Insert: {
+          caption?: string | null
           created_at?: string
           id?: string
           image_url: string
+          is_public?: boolean | null
           mission_id: string
           profile_id: string
           updated_at?: string
         }
         Update: {
+          caption?: string | null
           created_at?: string
           id?: string
           image_url?: string
+          is_public?: boolean | null
           mission_id?: string
           profile_id?: string
           updated_at?: string
@@ -171,6 +177,45 @@ export type Database = {
         }
         Relationships: []
       }
+      reactions: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          profile_id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          profile_id: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          profile_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'reactions_post_id_fkey'
+            columns: ['post_id']
+            isOneToOne: false
+            referencedRelation: 'posts'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'reactions_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       subscriptions: {
         Row: {
           created_at: string
@@ -214,6 +259,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_paid_or_trial: {
+        Args: { uid: string }
+        Returns: boolean
+      }
       consume_one_ticket: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -233,6 +282,16 @@ export type Database = {
       normalize_newlines: {
         Args: { src: string }
         Returns: string
+      }
+      pick_mission: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          used_at: string | null
+        }
       }
       pick_today_mission_jst: {
         Args: Record<PropertyKey, never>

@@ -96,7 +96,7 @@ export function SideBar({ isSubscription }: Props) {
             <div className='flex flex-col items-center justify-center gap-y-5'>
               <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className='fieldset size-full rounded-box border border-base-300 bg-base-200 p-4'>
-                  <fieldset className='fieldset'>
+                  <div>
                     <legend className='fieldset-legend'>💡2人以上でやりたくなるお題を考えよう！</legend>
                     <input
                       type='text'
@@ -109,7 +109,7 @@ export function SideBar({ isSubscription }: Props) {
                     {isSubmitted && (
                       <p className='mt-2 text-center text-base-content text-sm'>投稿してくれてありがとう🙇🏻🙇🏻</p>
                     )}
-                  </fieldset>
+                  </div>
                   <button type='submit' className='btn btn-neutral mt-4' disabled={isSubmitting}>
                     <Send className='mr-2 size-4' />
                     {isSubmitting && <span className='loading loading-spinner loading-sm mr-2 text-neutral-content' />}
@@ -131,10 +131,15 @@ export function SideBar({ isSubscription }: Props) {
                 恋人や友達にシェアしよう👀
               </button>
               <div className='mb-10 grid grid-flow-col gap-4'>
-                <Link className='flex items-center gap-x-2' href='https://www.tiktok.com/@weoo_official'>
+                <a
+                  className='flex items-center gap-x-2'
+                  href='https://www.tiktok.com/@weoo_official'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   <FaTiktok className='size-6' />
                   <span className='font-semibold text-lg'>TikTok</span>
-                </Link>
+                </a>
               </div>
             </div>
           </div>

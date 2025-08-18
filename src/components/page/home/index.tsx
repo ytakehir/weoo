@@ -5,23 +5,21 @@ import { A11y, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { differenceInCalendarDays, format, isToday, isYesterday } from 'date-fns'
-import { ja } from 'date-fns/locale/ja'
+import { differenceInCalendarDays } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useEffect, useReducer, useState, useTransition } from 'react'
+import { FormProvider } from 'react-hook-form'
 import { CardShowcase } from '@/components/card/card-showcase'
 import { MissionCard } from '@/components/card/mission-card'
+import { PostModal } from '@/components/modal/post-modal'
 import { checkoutSubscribe } from '@/lib/stripe/subscription'
 import type { MissionRow } from '@/lib/supabase/actions/mission'
-import { createPost, getPostsByMission, getPostsCountByMission, type PostWithPage } from '@/lib/supabase/actions/post'
-import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/tailwind'
 import type { Viewer } from '@/types/viewer'
-import { CardBack } from '../card/card-back'
-import { PlanModal } from '../modal/plan-modal'
-import { SigninModal } from '../modal/signin-modal'
-import { UpgradeModal } from '../modal/upgrade-modal'
+import { CardBack } from '../../card/card-back'
+import { PlanModal } from '../../modal/plan-modal'
+import { SigninModal } from '../../modal/signin-modal'
+import { UpgradeModal } from '../../modal/upgrade-modal'
+import { useHome } from './hooks'
 
 type Props = {
   user: User | null
@@ -31,117 +29,29 @@ type Props = {
 }
 
 export function Home({ user, missions, isSubscription, freeTrail }: Props) {
-  const router = useRouter()
-  const supabase = createClient()
-  const [active, setActive] = useState(0)
-  const [mission, setMission] = useState<MissionRow | undefined>(missions?.[0])
-  const [postCount, setPostCount] = useState<number>(0)
-  const [isLatest, setIsLatest] = useState<boolean>(true)
-  const [isPosted, setIsPosted] = useState<boolean>(false)
-  const [isOpen, setIsOpen] = useState<boolean>(true)
-  const [isOpenPlanModal, setIsOpenPlanModal] = useState<boolean>(false)
-  const [posts, setPosts] = useState<PostWithPage>()
-  const [isPending, startTransition] = useTransition()
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case 'INCREMENT':
-          if (posts?.total && state.count >= posts?.total / posts?.limit) return { count: state.count }
-          return { count: state.count + 1 }
-        case 'DECREMENT':
-          if (state.count <= 1) return { count: 1 }
-          return { count: state.count - 1 }
-        default:
-          return state
-      }
-    },
-    { count: 1 }
-  )
-
-  useEffect(() => {
-    setIsPosted(posts?.items.some((post) => post.profile_id === user?.id) ?? false)
-  }, [posts, user?.id])
-
-  const onUpload = async (file: File | null) => {
-    window.scrollTo({ top: 0 })
-    startTransition(async () => {
-      try {
-        if (!file || !mission) return
-
-        const {
-          data: { user },
-          error: userErr
-        } = await supabase.auth.getUser()
-        if (userErr || !user) return
-
-        const ext = file.name.split('.').pop() ?? 'webp'
-        const now = new Date()
-        const y = now.getUTCFullYear()
-        const m = String(now.getUTCMonth() + 1).padStart(2, '0')
-        const d = String(now.getUTCDate()).padStart(2, '0')
-        const objectPath = `${user.id}/${y}/${m}/${d}/${crypto.randomUUID()}.${ext}`
-
-        const { error: upErr } = await supabase.storage.from('posts').upload(objectPath, file, { upsert: false })
-
-        if (upErr) return
-
-        await createPost({
-          userId: user.id,
-          missionId: mission.id,
-          imageUrl: objectPath
-        })
-
-        setIsPosted(true)
-        router.refresh()
-      } catch (e) {
-        console.error('[onUpload]', e)
-      }
-    })
-  }
-
-  useEffect(() => {
-    const m = missions?.[active]
-    if (!m) return
-    setMission(m)
-    let canceled = false
-    ;(async () => {
-      const count = await getPostsCountByMission(m.id)
-      const p = await getPostsByMission(m.id, isLatest ? 'desc' : 'asc')
-      if (!canceled) {
-        setPostCount(count ?? 0)
-        if (p) setPosts(p)
-      }
-    })()
-    return () => {
-      canceled = true
-    }
-  }, [active, missions, isLatest])
-
-  useEffect(() => {
-    if (isPending) {
-      document.body.classList.add('overflow-hidden')
-    } else {
-      document.body.classList.remove('overflow-hidden')
-    }
-    return () => {
-      document.body.classList.remove('overflow-hidden')
-    }
-  }, [isPending])
-
-  const judgeDate = () => {
-    const usedAt = missions?.[active]?.used_at
-    if (!usedAt) return '今日'
-
-    const date = new Date(usedAt)
-    switch (true) {
-      case isToday(date):
-        return '今日'
-      case isYesterday(date):
-        return '昨日'
-      default:
-        return format(date, 'E曜日', { locale: ja })
-    }
-  }
+  const {
+    router,
+    active,
+    setActive,
+    mission,
+    postCount,
+    isLatest,
+    setIsLatest,
+    isPosted,
+    isOpen,
+    setIsOpen,
+    isOpenPlanModal,
+    setIsOpenPlanModal,
+    isOpenPostModal,
+    setIsOpenPostModal,
+    posts,
+    isPending,
+    state,
+    dispatch,
+    methods,
+    judgeDate,
+    onSubmit
+  } = useHome(user, missions)
 
   return (
     <>
@@ -172,6 +82,16 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
             trailEndDate={freeTrail.endDate}
           />
         )}
+      {isOpen && user && (freeTrail.isActive || isSubscription) && (
+        <FormProvider {...methods}>
+          <PostModal
+            isOpen={isOpenPostModal}
+            onIsOpen={() => setIsOpenPostModal(!isOpenPostModal)}
+            mission={mission?.title.replace(/\\n/g, '') ?? ''}
+            onSubmit={onSubmit}
+          />
+        </FormProvider>
+      )}
       <div className={cn('flex w-[90%] flex-col items-center justify-center')}>
         {!user && (
           <button type='button' className='btn btn-link text-base-content' onClick={() => router.push('/signin')}>
@@ -210,13 +130,13 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           >
             {missions?.map((mission) => (
               <SwiperSlide key={mission.id} dir='ltr' className='w-[99%]'>
-                <MissionCard mission={mission.title} onClickMission={onUpload} />
+                <MissionCard mission={mission.title} onClickMission={() => setIsOpenPostModal(true)} />
               </SwiperSlide>
             ))}
           </Swiper>
         )}
         {freeTrail.isActive && !isSubscription && (
-          <MissionCard mission={missions?.[0].title ?? ''} onClickMission={onUpload} />
+          <MissionCard mission={missions?.[0].title ?? ''} onClickMission={() => setIsOpenPostModal(true)} />
         )}
         {((!isSubscription && !freeTrail.isActive) || !user) && <CardBack />}
         {(isSubscription || freeTrail.isActive) && (

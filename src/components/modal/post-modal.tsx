@@ -1,18 +1,29 @@
-import { differenceInCalendarDays } from 'date-fns'
-import { Sparkles, X } from 'lucide-react'
+import { format } from 'date-fns'
+import { X } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { cn } from '@/lib/tailwind'
+import type { PostForm } from '../page/home/hooks'
 
 type Props = {
   isOpen: boolean
   onIsOpen: () => void
-  onSubscribe: () => void
-  trailEndDate: Date
+  mission: string
+  onSubmit: (data: PostForm) => void
 }
 
-export function PostModal({ isOpen, onIsOpen, onSubscribe, trailEndDate }: Props) {
+export function PostModal({ isOpen, onIsOpen, mission, onSubmit }: Props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useFormContext<PostForm>()
+  const [photo, setPhoto] = useState<File | null>(null)
+
   return (
     <dialog id='plan-modal' className={cn('modal', isOpen && 'modal-open')}>
-      <div className='modal-box relative flex flex-col overflow-visible bg-[color-mix(in_srgb,var(--color-primary)_25%,white)] p-0'>
+      <div className='modal-box relative flex flex-col items-center justify-center overflow-visible p-0'>
         <form method='dialog'>
           <button
             type='submit'
@@ -22,43 +33,99 @@ export function PostModal({ isOpen, onIsOpen, onSubscribe, trailEndDate }: Props
             <X className='size-4 text-base-content/70' />
           </button>
         </form>
-        {/* <div className='flex w-full items-center justify-center rounded-t-box bg-primary'>
-          <Image src={'/logo.png'} alt='logo' width={256} height={256} />
-        </div> */}
-        <div className='flex flex-col items-center justify-center p-6'>
-          <h3 className='text-center font-bold text-lg'>
-            あと{differenceInCalendarDays(trailEndDate, new Date())}日で無料トライアルが
-            <br />
-            終了します...🥲
-          </h3>
-          <p className='mt-2 text-base-content/70 text-xs'>終了後は全ての機能がご利用できなくなります</p>
-          <div className='divider mt-4 mb-0 text-base-content/70 text-xs'>もし、サブスクに登録すると...</div>
-          <ul className='mt-2 flex flex-col gap-y-1 text-xs leading-relaxed'>
-            <li>
-              <Sparkles className='me-2 inline-block size-4 text-warning' />
-              <span className='text-base-content'>追加で30日間無料で利用できる</span>
-            </li>
-            <li>
-              <Sparkles className='me-2 inline-block size-4 text-warning' />
-              <span className='text-base-content'>一週間（月〜日）のお題にいつでも投稿できる</span>
-            </li>
-            <li>
-              <Sparkles className='me-2 inline-block size-4 text-warning' />
-              <span className='text-base-content'>投稿しなくてもみんなの投稿が見える</span>
-            </li>
-            <li>
-              <Sparkles className='me-2 inline-block size-4 text-warning' />
-              <span className='text-base-content'>達成したお題をカレンダー形式で閲覧できる</span>
-            </li>
-          </ul>
-          <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='追加 30日間無料✨'>
-            <button type='button' className='btn btn-primary w-full' onClick={onSubscribe}>
-              月額500円で始める
+        <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex flex-col items-center justify-center gap-y-4 p-6'>
+            <h3 className='text-center font-bold text-lg'>
+              「{mission}」
+              <br />
+              に投稿する📮
+            </h3>
+            <div className={'card relative flex aspect-[3/4] w-full flex-col items-center'}>
+              <div className='card-body absolute inset-0 flex flex-col justify-between gap-0 p-0'>
+                <div className='relative flex flex-1 items-center justify-center'>
+                  {photo ? (
+                    <>
+                      <Image
+                        className='!size-full pointer-events-none rounded-box object-cover shadow-sm'
+                        src={URL.createObjectURL(photo) ?? ''}
+                        alt={photo?.name ?? ''}
+                        fill
+                      />
+                      <button
+                        type='submit'
+                        className='btn btn-xs btn-circle -top-3 -right-2 absolute border-none bg-base-100/70'
+                        onClick={() => setPhoto(null)}
+                      >
+                        <X className='size-4 text-base-content/70' />
+                      </button>
+                      <div className='absolute bottom-0 left-0 h-20 w-full rounded-b-box bg-gradient-to-t from-black/60 to-transparent' />
+                    </>
+                  ) : (
+                    <label
+                      htmlFor='photo'
+                      className='card-actions btn btn-link relative w-full items-center justify-center no-underline'
+                    >
+                      <input
+                        type='file'
+                        id='photo'
+                        accept='image/*'
+                        className='hidden'
+                        {...register('file', {
+                          onChange: (e) => setPhoto(e.target.files?.[0] ?? null)
+                        })}
+                      />
+                      <span className='absolute inline-flex size-2/3 animate-ping rounded-full bg-primary/75' />
+                      select photo!
+                    </label>
+                  )}
+                </div>
+                {photo && (
+                  <>
+                    <input
+                      type='text'
+                      className='input validator input-ghost input-sm !text-white absolute bottom-12 ml-2 font-medium text-xs placeholder-white caret-white focus-within:border-none focus-within:bg-transparent focus-within:outline-none focus-within:ring-0 focus:border-none focus:bg-transparent focus:outline-none focus:ring-0 focus-visible:border-none focus-visible:bg-transparent focus-visible:outline-none focus-visible:ring-0'
+                      placeholder='ここをタップして思い出を書き残そう！'
+                      {...register('caption')}
+                    />
+                    <div className='p-2'>
+                      <p className='text-right text-base-content text-sm'>{format(new Date(), 'yyyy/MM/dd HH:mm')}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+            <div className='flex w-full flex-col items-center justify-center gap-y-2'>
+              {errors.caption && <p className='validator-hint'>{errors.caption.message}</p>}
+              <div className='flex w-full items-center justify-start gap-x-2'>
+                <input type='checkbox' className='checkbox checkbox-neutral checkbox-xs' {...register('isPublic')} />
+                <p className='w-full justify-end text-left text-base-content/70 text-xs'>
+                  <a
+                    className='link link-info mr-1'
+                    href='https://www.tiktok.com/@weoo_official'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    weoo 公式TikTok
+                  </a>
+                  への掲載を許可する
+                </p>
+              </div>
+              <p className='w-full justify-end text-left text-base-content/70 text-xs'>
+                ※ キャプションは20文字までです
+              </p>
+              <p className='text-center text-base-content/70 text-xs'>
+                ⚠️ 各種SNSのアカウントなどの記載は禁止しています
+              </p>
+            </div>
+            <button type='submit' className='btn btn-neutral btn-wide mt-4' disabled={!photo || isSubmitting}>
+              {isSubmitting ? (
+                <span className='loading loading-spinner loading-sm mr-2 text-neutral-content' />
+              ) : (
+                '投稿する'
+              )}
             </button>
           </div>
-          <p className='mt-2 text-right text-base-content/70 text-xs'>いつでも退会・キャンセル可能</p>
-          <p className='mt-2 text-right text-base-content/70 text-xs'>無料期間終了後は自動で月額500円課金されます。</p>
-        </div>
+        </form>
       </div>
     </dialog>
   )

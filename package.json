@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "generate-daisy-ui-themes": "node scripts/daisy-ui-themes.js",
@@ -29,6 +29,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "emoji-picker-react": "^4.13.2",
     "husky": "^9.1.7",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.539.0",

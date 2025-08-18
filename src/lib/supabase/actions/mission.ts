@@ -53,8 +53,8 @@ export const getLatestUsedMission = async (): Promise<MissionRow | null> => {
 
 function getWeekStartUtc(d = new Date()): Date {
   // 月曜始まりの週の月曜 00:00 (UTC) を求める
-  const day = d.getUTCDay() // 0=Sun,1=Mon,...6=Sat
-  const diffToMon = (day + 6) % 7 // Mon=0, Tue=1, ... Sun=6
+  const day = d.getUTCDay()
+  const diffToMon = (day + 6) % 7
   const monday = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
   monday.setUTCDate(monday.getUTCDate() - diffToMon)
   // 00:00:00.000 UTC に揃える

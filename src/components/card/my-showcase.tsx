@@ -1,13 +1,15 @@
+import type { User } from '@supabase/supabase-js'
 import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Grid2x2, List, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
-import type { PostWithRelationsAndUrl } from '@/lib/supabase/actions/post'
+import type { PostWithRelationsUrlAndReactions } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
 import { Calendar } from './calendar'
 import { FlipCard } from './flip-card'
 
 type Props = {
-  posts?: PostWithRelationsAndUrl[]
+  user: User | null
+  posts?: PostWithRelationsUrlAndReactions[]
   isLatest: boolean
   onLatest: () => void
   viewMode: 'grid' | 'list' | 'calendar'
@@ -15,7 +17,7 @@ type Props = {
   isSubscription: boolean
 }
 
-export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode, isSubscription }: Props) {
+export function MyShowcase({ user, posts, isLatest, onLatest, viewMode, onViewMode, isSubscription }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   return (
@@ -90,22 +92,19 @@ export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode, is
               'w-full',
               viewMode === 'grid'
                 ? 'grid grid-cols-3 gap-0.5 sm:grid-cols-4 md:grid-cols-5'
-                : 'grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8'
+                : 'grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-10'
             )}
           >
             {viewMode === 'calendar' && <Calendar posts={posts} onClick={setSelectedIndex} />}
             {posts.map((post, i) => (
               <div
                 key={post.id}
-                className={cn(
-                  'relative',
-                  viewMode === 'grid' ? 'aspect-square' : 'card flex aspect-[3/4] flex-col items-center'
-                )}
+                className={cn('relative', viewMode === 'grid' ? 'aspect-square' : 'flex flex-col items-center')}
               >
-                {viewMode === 'list' && <FlipCard post={post} />}
+                {viewMode === 'list' && <FlipCard user={user} post={post} />}
                 {viewMode === 'grid' && (
                   <Image
-                    className='!size-full object-cover'
+                    className='!size-full pointer-events-none object-cover'
                     src={post.image_url_signed ?? '/no_image.png'}
                     alt={post.id}
                     fill
@@ -126,7 +125,7 @@ export function MyShowcase({ posts, isLatest, onLatest, viewMode, onViewMode, is
                 <div className='carousel w-full gap-x-8 rounded-box'>
                   {posts.map((post, i) => (
                     <div key={post.id} className='carousel-item w-full' id={`item${i}`}>
-                      <FlipCard post={post} />
+                      <FlipCard user={user} post={post} />
                     </div>
                   ))}
                 </div>

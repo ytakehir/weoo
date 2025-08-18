@@ -20,13 +20,24 @@ export type PostWithRelationsAndUrl = PostWithRelations & {
 }
 
 export type PostWithPage = {
-  items: PostWithRelationsAndUrl[]
+  items: PostWithRelationsUrlAndReactions[]
 } & {
   total: number
   page: number
   limit: number
   totalPages: number
   hasMore: boolean
+}
+type ReactionRow = Database['public']['Tables']['reactions']['Row']
+
+export type ReactionWithCount = {
+  url: string
+  count: number
+  rows: ReactionRow[]
+}
+
+export type PostWithRelationsUrlAndReactions = PostWithRelationsAndUrl & {
+  reactions: ReactionWithCount[]
 }
 
 const POST_SELECT = '*, mission:missions(*), profile:profiles(id, display_name, avatar_url)'
@@ -66,6 +77,40 @@ const buildPageMeta = (total: number, page: number, limit: number) => {
   return { total, page, limit, totalPages, hasMore }
 }
 
+async function attachReactions(posts: PostWithRelationsAndUrl[]): Promise<PostWithRelationsUrlAndReactions[]> {
+  if (!posts.length) return []
+
+  const supabase = await createClient()
+  const ids = posts.map((p) => p.id)
+
+  const { data: rx, error: rxErr } = await supabase.from('reactions').select('*').in('post_id', ids)
+
+  if (rxErr) throw rxErr
+
+  return posts.map((p) => {
+    const list = (rx ?? []).filter((r) => r.post_id === p.id) as ReactionRow[]
+    const counts = list.reduce<Record<string, number>>((acc, r) => {
+      acc[r.url] = (acc[r.url] ?? 0) + 1
+      return acc
+    }, {})
+
+    const withCount: ReactionWithCount[] = Object.entries(counts).map(([url, count]) => {
+      const rows = list.filter((r) => r.url === url)
+
+      return {
+        url,
+        count,
+        rows
+      }
+    })
+
+    return {
+      ...p,
+      reactions: withCount
+    }
+  })
+}
+
 // 一覧（新着順）
 export const getPosts = async (
   page = 1,
@@ -96,7 +141,7 @@ export const getPostsByUser = async (
   page = 1,
   limit = 30,
   opts?: { expiresInSec?: number }
-): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> => {
+): Promise<{ items: PostWithRelationsUrlAndReactions[] } & ReturnType<typeof buildPageMeta>> => {
   const supabase = await createClient()
   const from = (page - 1) * limit
   const to = from + limit - 1
@@ -110,7 +155,8 @@ export const getPostsByUser = async (
 
   if (error) throw error
 
-  const items = await attachSignedUrls((data ?? []) as PostWithRelations[], opts?.expiresInSec)
+  const signed = await attachSignedUrls((data ?? []) as PostWithRelations[], opts?.expiresInSec)
+  const items = await attachReactions(signed)
 
   return { items, ...buildPageMeta(count ?? 0, page, limit) }
 }
@@ -122,7 +168,7 @@ export const getPostsByMission = async (
   page = 1,
   limit = 30,
   opts?: { expiresInSec?: number }
-): Promise<{ items: PostWithRelationsAndUrl[] } & ReturnType<typeof buildPageMeta>> => {
+): Promise<{ items: PostWithRelationsUrlAndReactions[] } & ReturnType<typeof buildPageMeta>> => {
   const supabase = await createClient()
   const from = (page - 1) * limit
   const to = from + limit - 1
@@ -136,18 +182,27 @@ export const getPostsByMission = async (
 
   if (error) throw error
 
-  const items = await attachSignedUrls((data ?? []) as PostWithRelations[], opts?.expiresInSec)
+  const signed = await attachSignedUrls((data ?? []) as PostWithRelations[], opts?.expiresInSec)
+  const items = await attachReactions(signed)
 
   return { items, ...buildPageMeta(count ?? 0, page, limit) }
 }
 
 // 作成
-export const createPost = async (input: { userId: string; missionId: string; imageUrl: string }): Promise<PostRow> => {
+export const createPost = async (input: {
+  userId: string
+  missionId: string
+  imageUrl: string
+  caption: string | null
+  isPublic: boolean
+}): Promise<PostRow> => {
   const supabase = await createClient()
   const payload: PostInsert = {
     profile_id: input.userId,
     mission_id: input.missionId,
-    image_url: input.imageUrl
+    image_url: input.imageUrl,
+    caption: input.caption,
+    is_public: input.isPublic
   }
 
   const { data, error } = await supabase.from('posts').insert(payload).select('*').single()
