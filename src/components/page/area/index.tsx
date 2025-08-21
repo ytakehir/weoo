@@ -12,7 +12,7 @@ import { CardShowcase } from '@/components/card/card-showcase'
 import { MissionCard } from '@/components/card/mission-card'
 import { PostModal } from '@/components/modal/post-modal'
 import { checkoutSubscribe } from '@/lib/stripe/subscription'
-import type { MissionRow } from '@/lib/supabase/actions/mission'
+import type { AreaMissionRow } from '@/lib/supabase/actions/area_mission'
 import { cn } from '@/lib/tailwind'
 import type { Viewer } from '@/types/viewer'
 import { CardBack } from '../../card/card-back'
@@ -23,12 +23,12 @@ import { useHome } from './hooks'
 
 type Props = {
   user: User | null
-  missions: MissionRow[] | null
+  missions: AreaMissionRow[] | null
   isSubscription: boolean
   freeTrail: Viewer['freeTrail']
 }
 
-export function Home({ user, missions, isSubscription, freeTrail }: Props) {
+export function Area({ user, missions, isSubscription, freeTrail }: Props) {
   const {
     router,
     active,
@@ -49,7 +49,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
     state,
     dispatch,
     methods,
-    judgeDate,
+    judgeRegion,
     onSubmit
   } = useHome(user, missions)
 
@@ -85,6 +85,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
       {isOpen && user && (freeTrail.isActive || isSubscription) && (
         <FormProvider {...methods}>
           <PostModal
+            type='area'
             isOpen={isOpenPostModal}
             onIsOpen={() => setIsOpenPostModal(!isOpenPostModal)}
             // mission={mission?.title.replace(/\\n/g, '') ?? ''}
@@ -106,11 +107,11 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
         <div className='flex items-center justify-center gap-4'>
           <ChevronLeft className={cn('size-8 opacity-0', missions && missions?.length > 1 && 'opacity-100')} />
           <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
-            {judgeDate()}のお題
+            {judgeRegion()}のお題
           </h1>
           <ChevronRight className={cn('size-8 opacity-0', active > 0 && 'opacity-100')} />
         </div>
-        {isSubscription && (
+        {freeTrail.isActive && isSubscription && (
           <Swiper
             dir='rtl'
             modules={[Navigation, A11y]}
@@ -123,21 +124,20 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           >
             {missions?.map((mission) => (
               <SwiperSlide key={mission.id} dir='ltr' className='w-[99%]'>
-                <MissionCard
-                  mission={mission.title}
-                  onClickMission={() => setIsOpenPostModal(true)}
-                  disable={active > 0 && !isSubscription && freeTrail?.isActive}
-                />
+                <MissionCard type='area' mission={mission.title} onClickMission={() => setIsOpenPostModal(true)} />
               </SwiperSlide>
             ))}
           </Swiper>
         )}
-        {((!isSubscription && !freeTrail.isActive) || !user || !missions) && <CardBack />}
-        {(isSubscription || !freeTrail.isActive) && (
-          <p className='mt-2 text-base-content text-xs'>💡 カードを左右にスワイプして今週のお題に参加しよう</p>
+        {((!isSubscription && !freeTrail.isActive) || !user || !(missions && missions?.length > 0)) && (
+          <CardBack type='area' />
+        )}
+        {(isSubscription || freeTrail.isActive) && (
+          <p className='mt-2 text-base-content text-xs'>💡 カードを左右にスワイプして他の地域のお題にも参加しよう</p>
         )}
         <div className='mt-20 w-full px-5'>
           <CardShowcase
+            type='area'
             user={user}
             mission={mission?.title.replace(/\\n/g, '')}
             posts={posts?.items}

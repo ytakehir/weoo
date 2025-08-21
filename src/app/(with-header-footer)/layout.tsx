@@ -1,5 +1,6 @@
 'use server'
 
+import { Docs } from '@/components/layout/docs'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { SideBar } from '@/components/layout/side-bar'
@@ -20,7 +21,6 @@ export default async function HeaderFooterLayout({
   children: React.ReactNode
 }>) {
   const viewer = await getViewer()
-
   return (
     <ViewerProvider initial={viewer}>
       <div className='flex flex-col items-center'>
@@ -39,6 +39,7 @@ export default async function HeaderFooterLayout({
           freeTrail={viewer.freeTrail}
         />
         <SideBar isSubscription={viewer.isSubscription} />
+        <Docs />
         <div className={cn('my-20 flex min-h-screen w-full justify-center', zenmaru.className)}>{children}</div>
         <Footer />
       </div>

@@ -10,9 +10,10 @@ type Props = {
   isOpen: boolean
   onIsOpen: () => void
   onSubmit: (data: PostForm) => void
+  type?: 'home' | 'seasons' | 'area'
 }
 
-export function PostModal({ isOpen, onIsOpen, onSubmit }: Props) {
+export function PostModal({ type, isOpen, onIsOpen, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
@@ -52,17 +53,21 @@ export function PostModal({ isOpen, onIsOpen, onSubmit }: Props) {
                       />
                       <button
                         type='submit'
-                        className='btn btn-xs btn-circle -top-3 -right-2 absolute border-none bg-base-100/70'
+                        className='btn btn-xs btn-circle -top-3 -right-2 absolute border-none bg-base-content/70'
                         onClick={() => setPhoto(null)}
                       >
-                        <X className='size-4 text-base-content/70' />
+                        <X className='size-4 text-base-100/70' />
                       </button>
                       <div className='absolute bottom-0 left-0 h-20 w-full rounded-b-box bg-gradient-to-t from-black/60 to-transparent' />
                     </>
                   ) : (
                     <label
                       htmlFor='photo'
-                      className='card-actions btn btn-link relative w-full items-center justify-center no-underline'
+                      className={cn(
+                        'card-actions btn btn-link relative w-full items-center justify-center no-underline',
+                        type === 'seasons' && 'text-[#5e81ac]',
+                        type === 'area' && 'text-accent'
+                      )}
                     >
                       <input
                         type='file'
@@ -73,7 +78,13 @@ export function PostModal({ isOpen, onIsOpen, onSubmit }: Props) {
                           onChange: (e) => setPhoto(e.target.files?.[0] ?? null)
                         })}
                       />
-                      <span className='absolute inline-flex size-2/3 animate-ping rounded-full bg-primary/75' />
+                      <span
+                        className={cn(
+                          'absolute inline-flex size-2/3 animate-ping rounded-full bg-primary/75',
+                          type === 'seasons' && 'bg-[#5e81ac]',
+                          type === 'area' && 'bg-accent'
+                        )}
+                      />
                       select photo!
                     </label>
                   )}

@@ -18,6 +18,7 @@ export const getMissions = async (page = 1, limit = 20): Promise<MissionRow[]> =
   const { data, error } = await supabase
     .from('missions')
     .select('*')
+    .eq('kind', 'daily')
     .order('created_at', { ascending: false })
     .range(from, to)
 
@@ -43,6 +44,7 @@ export const getLatestUsedMission = async (): Promise<MissionRow | null> => {
   const { data, error } = await supabase
     .from('missions')
     .select('*')
+    .eq('kind', 'daily')
     .not('used_at', 'is', null)
     .order('used_at', { ascending: false, nullsFirst: false })
 
@@ -71,6 +73,7 @@ export const getWeekMissions = async (): Promise<MissionRow[]> => {
   const { data, error } = await supabase
     .from('missions')
     .select('*')
+    .eq('kind', 'daily')
     .not('used_at', 'is', null)
     .gte('used_at', start.toISOString())
     .lt('used_at', end.toISOString())

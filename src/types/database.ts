@@ -8,6 +8,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      area_missions: {
+        Row: {
+          created_at: string
+          id: string
+          publish_end_at: string
+          publish_start_at: string
+          region: Database['public']['Enums']['area_region']
+          title: string
+          updated_at: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          publish_end_at: string
+          publish_start_at: string
+          region: Database['public']['Enums']['area_region']
+          title: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          publish_end_at?: string
+          publish_start_at?: string
+          region?: Database['public']['Enums']['area_region']
+          title?: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Relationships: []
+      }
       mission_submissions: {
         Row: {
           approved_at: string | null
@@ -76,6 +109,10 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          kind: Database['public']['Enums']['mission_kind']
+          publish_end_at: string | null
+          publish_start_at: string | null
+          region: Database['public']['Enums']['region_jp'] | null
           title: string
           updated_at: string
           used_at: string | null
@@ -83,6 +120,10 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          kind?: Database['public']['Enums']['mission_kind']
+          publish_end_at?: string | null
+          publish_start_at?: string | null
+          region?: Database['public']['Enums']['region_jp'] | null
           title: string
           updated_at?: string
           used_at?: string | null
@@ -90,6 +131,10 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          kind?: Database['public']['Enums']['mission_kind']
+          publish_end_at?: string | null
+          publish_start_at?: string | null
+          region?: Database['public']['Enums']['region_jp'] | null
           title?: string
           updated_at?: string
           used_at?: string | null
@@ -216,6 +261,36 @@ export type Database = {
           }
         ]
       }
+      seasons_missions: {
+        Row: {
+          created_at: string
+          id: string
+          publish_end_at: string
+          publish_start_at: string
+          title: string
+          updated_at: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          publish_end_at: string
+          publish_start_at: string
+          title: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          publish_end_at?: string
+          publish_start_at?: string
+          title?: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string
@@ -288,6 +363,10 @@ export type Database = {
         Returns: {
           created_at: string
           id: string
+          kind: Database['public']['Enums']['mission_kind']
+          publish_end_at: string | null
+          publish_start_at: string | null
+          region: Database['public']['Enums']['region_jp'] | null
           title: string
           updated_at: string
           used_at: string | null
@@ -298,6 +377,10 @@ export type Database = {
         Returns: {
           created_at: string
           id: string
+          kind: Database['public']['Enums']['mission_kind']
+          publish_end_at: string | null
+          publish_start_at: string | null
+          region: Database['public']['Enums']['region_jp'] | null
           title: string
           updated_at: string
           used_at: string | null
@@ -321,6 +404,9 @@ export type Database = {
       }
     }
     Enums: {
+      area_region: 'hokkaido' | 'tohoku' | 'kanto' | 'chubu' | 'kansai' | 'chugoku' | 'shikoku' | 'kyushu_okinawa'
+      mission_kind: 'daily' | 'season' | 'area'
+      region_jp: 'hokkaido' | 'tohoku' | 'kanto' | 'chubu' | 'kansai' | 'chugoku' | 'shikoku' | 'kyushu_okinawa'
       status: 'pending' | 'approved' | 'rejected'
     }
     CompositeTypes: {
@@ -441,6 +527,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      area_region: ['hokkaido', 'tohoku', 'kanto', 'chubu', 'kansai', 'chugoku', 'shikoku', 'kyushu_okinawa'],
+      mission_kind: ['daily', 'season', 'area'],
+      region_jp: ['hokkaido', 'tohoku', 'kanto', 'chubu', 'kansai', 'chugoku', 'shikoku', 'kyushu_okinawa'],
       status: ['pending', 'approved', 'rejected']
     }
   }

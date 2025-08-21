@@ -11,6 +11,7 @@ const notosan = Noto_Sans_JP({
 })
 
 export const viewport: Viewport = {
+  viewportFit: 'cover',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1

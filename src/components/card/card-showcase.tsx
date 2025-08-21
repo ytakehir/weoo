@@ -21,6 +21,7 @@ type Props = {
   isPosted: boolean
   isSubscription: boolean
   freeTrail: Viewer['freeTrail']
+  type?: 'home' | 'seasons' | 'area'
 }
 
 export function CardShowcase({
@@ -32,7 +33,8 @@ export function CardShowcase({
   onLatest,
   isPosted,
   isSubscription,
-  freeTrail
+  freeTrail,
+  type
 }: Props) {
   const router = useRouter()
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
@@ -80,8 +82,16 @@ export function CardShowcase({
           <div className='status status-lg status-accent' />
         </div>
         <h2 className='font-semibold text-xl'>
-          <span className='underline decoration-primary/50 decoration-wavy'>みんなの</span>「
-          {isSubscription && mission ? mission : '〇〇'}」
+          <span
+            className={cn(
+              'underline decoration-primary/50 decoration-wavy',
+              type === 'seasons' && 'decoration-[#5e81ac]/50',
+              type === 'area' && 'decoration-accent/50'
+            )}
+          >
+            みんなの
+          </span>
+          「{isSubscription && mission ? mission : '〇〇'}」
         </h2>
       </div>
       <h3 className='mt-2 mb-7 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>
@@ -100,7 +110,13 @@ export function CardShowcase({
                     className='peer hidden'
                     onChange={() => setViewMode('grid')}
                   />
-                  <Grid2x2 className='size-6 peer-checked:stroke-primary' />
+                  <Grid2x2
+                    className={cn(
+                      'size-6 peer-checked:stroke-primary',
+                      type === 'seasons' && 'peer-checked:stroke-[#5e81ac]',
+                      type === 'area' && 'peer-checked:stroke-accent'
+                    )}
+                  />
                 </label>
                 <label htmlFor='list'>
                   <input
@@ -111,7 +127,13 @@ export function CardShowcase({
                     onChange={() => setViewMode('list')}
                     defaultChecked
                   />
-                  <List className='size-6 peer-checked:stroke-primary' />
+                  <List
+                    className={cn(
+                      'size-6 peer-checked:stroke-primary',
+                      type === 'seasons' && 'peer-checked:stroke-[#5e81ac]',
+                      type === 'area' && 'peer-checked:stroke-accent'
+                    )}
+                  />
                 </label>
               </div>
               <div className='dropdown dropdown-end dropdown-hover'>
