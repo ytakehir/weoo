@@ -7,7 +7,7 @@ import { useState } from 'react'
 export function Docs() {
   const [active, setActive] = useState<'home' | 'seasons' | 'area'>('home')
   return (
-    <div className='dock dock-sm bottom-10 mx-auto w-[95%] rounded-full shadow-md'>
+    <div className='dock dock-sm bottom-10 z-900 mx-auto w-[95%] rounded-full shadow-md'>
       <Link
         href={'/seasons'}
         className={active === 'seasons' ? 'dock-active after:text-primary' : ''}
