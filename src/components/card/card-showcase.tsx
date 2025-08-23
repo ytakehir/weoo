@@ -91,7 +91,7 @@ export function CardShowcase({
           >
             みんなの
           </span>
-          「{isSubscription && freeTrail.isActive && mission ? mission : '〇〇'}」
+          「{(isSubscription || freeTrail.isActive) && mission ? mission : '〇〇'}」
         </h2>
       </div>
       <h3 className='mt-2 mb-7 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>

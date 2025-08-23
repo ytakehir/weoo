@@ -111,7 +111,7 @@ export function Area({ user, missions, isSubscription, freeTrail }: Props) {
           </h1>
           <ChevronRight className={cn('size-8 opacity-0', active > 0 && 'opacity-100')} />
         </div>
-        {freeTrail.isActive && isSubscription && (
+        {(freeTrail.isActive || isSubscription) && (
           <Swiper
             dir='rtl'
             modules={[Navigation, A11y]}
@@ -129,7 +129,7 @@ export function Area({ user, missions, isSubscription, freeTrail }: Props) {
             ))}
           </Swiper>
         )}
-        {((!isSubscription && !freeTrail.isActive) || !user || !(missions && missions?.length > 0)) && (
+        {((!isSubscription || !freeTrail.isActive) || !user || !(missions && missions?.length > 0)) && (
           <CardBack type='area' />
         )}
         {(isSubscription || freeTrail.isActive) && (

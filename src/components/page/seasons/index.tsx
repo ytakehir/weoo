@@ -108,7 +108,7 @@ export function Seasons({ user, missions, isSubscription, freeTrail }: Props) {
           <h1 className='my-5 flex w-full items-end justify-center gap-x-0.5 font-semibold text-xl'>季節のお題</h1>
           <ChevronRight className={cn('size-8 opacity-0', active > 0 && 'opacity-100')} />
         </div>
-        {freeTrail.isActive && isSubscription && (
+        {(freeTrail.isActive || isSubscription) && (
           <Swiper
             dir='rtl'
             modules={[Navigation, A11y]}
@@ -126,7 +126,7 @@ export function Seasons({ user, missions, isSubscription, freeTrail }: Props) {
             ))}
           </Swiper>
         )}
-        {((!isSubscription && !freeTrail.isActive) || !user || !(missions && missions?.length > 0)) && (
+        {((!isSubscription || !freeTrail.isActive) || !user || !(missions && missions?.length > 0)) && (
           <CardBack type='seasons' />
         )}
         {(isSubscription || freeTrail.isActive) && (

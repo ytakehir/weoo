@@ -110,7 +110,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           </h1>
           <ChevronRight className={cn('size-8 opacity-0', active > 0 && 'opacity-100')} />
         </div>
-        {isSubscription && freeTrail.isActive && (
+        {isSubscription || freeTrail.isActive && (
           <Swiper
             dir='rtl'
             modules={[Navigation, A11y]}
@@ -132,7 +132,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
             ))}
           </Swiper>
         )}
-        {((!isSubscription && !freeTrail.isActive) || !user || !missions) && <CardBack />}
+        {((!isSubscription || !freeTrail.isActive) || !user || !missions) && <CardBack />}
         {(isSubscription || !freeTrail.isActive) && (
           <p className='mt-2 text-base-content text-xs'>💡 カードを左右にスワイプして今週のお題に参加しよう</p>
         )}
