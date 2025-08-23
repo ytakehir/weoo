@@ -110,29 +110,30 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           </h1>
           <ChevronRight className={cn('size-8 opacity-0', active > 0 && 'opacity-100')} />
         </div>
-        {isSubscription || freeTrail.isActive && (
-          <Swiper
-            dir='rtl'
-            modules={[Navigation, A11y]}
-            slidesPerView={1}
-            resistanceRatio={0.5}
-            speed={350}
-            onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-            className='w-full'
-            spaceBetween={'10%'}
-          >
-            {missions?.map((mission) => (
-              <SwiperSlide key={mission.id} dir='ltr' className='w-[99%]'>
-                <MissionCard
-                  mission={mission.title}
-                  onClickMission={() => setIsOpenPostModal(true)}
-                  disable={active > 0 && !isSubscription && freeTrail?.isActive}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        )}
-        {((!isSubscription || !freeTrail.isActive) || !user || !missions) && <CardBack />}
+        {isSubscription ||
+          (freeTrail.isActive && (
+            <Swiper
+              dir='rtl'
+              modules={[Navigation, A11y]}
+              slidesPerView={1}
+              resistanceRatio={0.5}
+              speed={350}
+              onSlideChange={(swiper) => setActive(swiper.activeIndex)}
+              className='w-full'
+              spaceBetween={'10%'}
+            >
+              {missions?.map((mission) => (
+                <SwiperSlide key={mission.id} dir='ltr' className='w-[99%]'>
+                  <MissionCard
+                    mission={mission.title}
+                    onClickMission={() => setIsOpenPostModal(true)}
+                    disable={active > 0 && !isSubscription && freeTrail?.isActive}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ))}
+        {(!isSubscription || !freeTrail.isActive || !user || !missions) && <CardBack />}
         {(isSubscription || !freeTrail.isActive) && (
           <p className='mt-2 text-base-content text-xs'>💡 カードを左右にスワイプして今週のお題に参加しよう</p>
         )}
