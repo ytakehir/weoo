@@ -110,7 +110,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           </h1>
           <ChevronRight className={cn('size-8 opacity-0', active > 0 && 'opacity-100')} />
         </div>
-        {isSubscription && (
+        {isSubscription && freeTrail.isActive && (
           <Swiper
             dir='rtl'
             modules={[Navigation, A11y]}
