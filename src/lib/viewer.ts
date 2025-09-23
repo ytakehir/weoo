@@ -15,7 +15,7 @@ export const getViewer = cache(async (): Promise<Viewer> => {
     supabase.from('profiles').select().eq('id', user.id).maybeSingle(),
     supabase
       .from('subscriptions')
-      .select('status')
+      .select('status, current_period_end')
       .eq('profile_id', user.id)
       .in('status', ['active', 'trialing'])
       .maybeSingle()
@@ -24,9 +24,9 @@ export const getViewer = cache(async (): Promise<Viewer> => {
   return {
     user: user,
     profile: profile ?? null,
-    isSubscription: !!sub,
+    isSubscription: sub ? new Date(sub.current_period_end) >= new Date() : false,
     freeTrail: {
-      isActive: differenceInCalendarDays(profile.free_trial_end, new Date()) <= 30,
+      isActive: differenceInCalendarDays(profile.free_trial_end, new Date()) > 0,
       endDate: new Date(profile.free_trial_end)
     }
   }
