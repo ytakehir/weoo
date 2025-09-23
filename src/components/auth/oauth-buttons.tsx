@@ -3,15 +3,12 @@ import { FaApple, FaFacebook, FaGithub, FaGoogle, FaXTwitter } from 'react-icons
 import { createClient } from '@/lib/supabase/client'
 
 export function OAuthButtons({
-  plan,
   isApple = false,
   isFacebook = false,
   isGithub = false,
   isGoogle = true,
   isX = false
-}: {
-  plan: 'free' | 'pro'
-} & Partial<{
+}: Partial<{
   isApple: boolean
   isFacebook: boolean
   isGithub: boolean
@@ -25,7 +22,7 @@ export function OAuthButtons({
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}?plan=${plan}`
+        redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`
       }
     })
   }

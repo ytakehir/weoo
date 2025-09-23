@@ -1,18 +1,17 @@
+import type { User } from '@supabase/supabase-js'
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Viewer } from '@/types/viewer'
 
 type Props = {
   nav: {
     title: string
     link: string
   }[]
-  isSubscription: boolean
-  freeTrail: Viewer['freeTrail']
+  user: User | null
 }
 
-export async function Header({ nav, isSubscription, freeTrail }: Props) {
+export async function Header({ nav, user }: Props) {
   return (
     <header className='fixed top-0 right-0 left-0 z-50 w-full bg-base-100'>
       <div className='container mx-auto px-4 py-4 sm:px-6'>
@@ -38,7 +37,7 @@ export async function Header({ nav, isSubscription, freeTrail }: Props) {
           </nav>
 
           <div className='flex items-center space-x-4'>
-            {isSubscription || freeTrail.isActive ? (
+            {user ? (
               <label htmlFor='side-bar' className='drawer-button'>
                 <Menu className='size-5' />
               </label>

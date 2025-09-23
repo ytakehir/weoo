@@ -68,6 +68,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
           isOpen={isOpenPlanModal}
           onIsOpen={() => setIsOpenPlanModal(!isOpen)}
           onSubscribe={() => checkoutSubscribe(30)}
+          trailEndDate={freeTrail.endDate}
         />
       )}
       {isOpen &&
@@ -132,7 +133,7 @@ export function Home({ user, missions, isSubscription, freeTrail }: Props) {
             ))}
           </Swiper>
         )}
-        {(!isSubscription || !freeTrail.isActive || !user || !missions) && <CardBack />}
+        {(!(isSubscription || freeTrail.isActive) || !user || !missions) && <CardBack />}
         {(isSubscription || !freeTrail.isActive) && (
           <p className='mt-2 text-base-content text-xs'>💡 カードを左右にスワイプして今週のお題に参加しよう</p>
         )}

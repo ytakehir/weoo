@@ -6,7 +6,6 @@ import { getViewer } from '@/lib/viewer'
 
 export default async function SeasonsPage() {
   const viewer = await getViewer()
-  // const missions = (await getWeekMissions())
   const missions = await getSeasonsMissions()
 
   return (

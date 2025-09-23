@@ -67,6 +67,7 @@ export function Seasons({ user, missions, isSubscription, freeTrail }: Props) {
           isOpen={isOpenPlanModal}
           onIsOpen={() => setIsOpenPlanModal(!isOpen)}
           onSubscribe={() => checkoutSubscribe(30)}
+          trailEndDate={freeTrail.endDate}
         />
       )}
       {isOpen &&
@@ -126,7 +127,7 @@ export function Seasons({ user, missions, isSubscription, freeTrail }: Props) {
             ))}
           </Swiper>
         )}
-        {(!isSubscription || !freeTrail.isActive || !user || !(missions && missions?.length > 0)) && (
+        {(!(isSubscription || freeTrail.isActive) || !user || !(missions && missions?.length > 0)) && (
           <CardBack type='seasons' />
         )}
         {(isSubscription || freeTrail.isActive) && (

@@ -5,13 +5,15 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { FaTiktok } from 'react-icons/fa6'
+import type { Viewer } from '@/types/viewer'
 import { useMissionForm } from './hooks'
 
 type Props = {
   isSubscription: boolean
+  freeTrail: Viewer['freeTrail']
 }
 
-export function SideBar({ isSubscription }: Props) {
+export function SideBar({ isSubscription, freeTrail }: Props) {
   const { isSubmitted, methods, onSubmit, handlePortal, handleSubscribe } = useMissionForm()
   const {
     register,
@@ -78,7 +80,7 @@ export function SideBar({ isSubscription }: Props) {
                       サブスクを解約する
                     </div>
                   </button>
-                ) : (
+                ) : freeTrail.endDate > new Date() ? (
                   <div
                     className='tooltip tooltip-right tooltip-open tooltip-neutral w-fit pr-0 drop-shadow-md before:p-1 before:text-xs'
                     data-tip='追加 30日間無料✨'
@@ -90,6 +92,13 @@ export function SideBar({ isSubscription }: Props) {
                       </div>
                     </button>
                   </div>
+                ) : (
+                  <button type='button' className='link link-primary link-hover' onClick={() => handleSubscribe()}>
+                    <div className='flex items-center gap-x-5'>
+                      <LogIn className='size-4' />
+                      サブスクに加入する
+                    </div>
+                  </button>
                 )}
               </li>
             </nav>

@@ -35,10 +35,9 @@ export default async function HeaderFooterLayout({
               link: '/contact'
             }
           ]}
-          isSubscription={viewer.isSubscription}
-          freeTrail={viewer.freeTrail}
+          user={viewer.user}
         />
-        <SideBar isSubscription={viewer.isSubscription} />
+        <SideBar isSubscription={viewer.isSubscription} freeTrail={viewer.freeTrail} />
         <Docs />
         <div className={cn('my-20 flex min-h-screen w-full justify-center', zenmaru.className)}>{children}</div>
         <Footer />

@@ -6,9 +6,10 @@ type Props = {
   isOpen: boolean
   onIsOpen: () => void
   onSubscribe: () => void
+  trailEndDate: Date
 }
 
-export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
+export function PlanModal({ isOpen, onIsOpen, onSubscribe, trailEndDate }: Props) {
   return (
     <dialog id='plan-modal' className={cn('modal', isOpen && 'modal-open')}>
       <div className='modal-box relative flex flex-col overflow-visible p-0'>
@@ -48,11 +49,17 @@ export function PlanModal({ isOpen, onIsOpen, onSubscribe }: Props) {
               <span className='text-base-content'>達成したお題をカレンダー形式で閲覧できる</span>
             </li>
           </ul>
-          <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='追加 30日間無料✨'>
+          {trailEndDate > new Date() ? (
+            <div className='tooltip tooltip-open tooltip-neutral mt-15 w-full before:p-2' data-tip='追加 30日間無料✨'>
+              <button type='button' className='btn btn-primary w-full' onClick={onSubscribe}>
+                月額500円で始める
+              </button>
+            </div>
+          ) : (
             <button type='button' className='btn btn-primary w-full' onClick={onSubscribe}>
               月額500円で始める
             </button>
-          </div>
+          )}
           <p className='mt-2 text-right text-base-content/70 text-xs'>いつでも退会・キャンセル可能</p>
           <p className='mt-2 text-right text-base-content/70 text-xs'>無料期間終了後は自動で月額500円課金されます。</p>
         </div>
