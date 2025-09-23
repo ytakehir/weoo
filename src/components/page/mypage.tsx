@@ -6,14 +6,16 @@ import { MyShowcase } from '@/components/card/my-showcase'
 import { checkoutSubscribe } from '@/lib/stripe/subscription'
 import { getPostsByUser, type PostWithPage } from '@/lib/supabase/actions/post'
 import { cn } from '@/lib/tailwind'
+import type { Viewer } from '@/types/viewer'
 import { PlanModal } from '../modal/plan-modal'
 
 type Props = {
   user: User | null
   isSubscription: boolean
+  freeTrail: Viewer['freeTrail']
 }
 
-export function Mypage({ user, isSubscription }: Props) {
+export function Mypage({ user, isSubscription, freeTrail }: Props) {
   const [isLatest, setIsLatest] = useState<boolean>(true)
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'calendar'>('list')
   const [isOpen, setIsOpen] = useState<boolean>(true)
@@ -47,7 +49,12 @@ export function Mypage({ user, isSubscription }: Props) {
   return (
     <div className='flex w-[90%] flex-col items-center justify-start'>
       {isOpen && user && !isSubscription && (
-        <PlanModal isOpen={isOpen} onIsOpen={() => setIsOpen(!isOpen)} onSubscribe={() => checkoutSubscribe(30)} />
+        <PlanModal
+          isOpen={isOpen}
+          onIsOpen={() => setIsOpen(!isOpen)}
+          onSubscribe={() => checkoutSubscribe(30)}
+          trailEndDate={freeTrail.endDate}
+        />
       )}
       <MyShowcase
         user={user}

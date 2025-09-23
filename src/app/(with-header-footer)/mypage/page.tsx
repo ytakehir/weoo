@@ -11,5 +11,5 @@ export default async function MypagePage() {
     redirect('/signin')
   }
 
-  return <Mypage user={viewer.user} isSubscription={viewer.isSubscription} />
+  return <Mypage user={viewer.user} isSubscription={viewer.isSubscription} freeTrail={viewer.freeTrail}/>
 }
