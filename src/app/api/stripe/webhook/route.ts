@@ -46,13 +46,18 @@ export async function POST(req: Request) {
 
       const profile_id = profile?.id ?? null
 
+      let status = sub.status
+      if (sub.status === 'trialing' && sub.trial_end && sub.trial_end * 1000 < Date.now()) {
+        status = 'active'
+      }
+
       // subscription レコードを upsert（削除も canceled 更新で保持）
       const payload = {
         id: sub.id,
         profile_id, // null になり得る → 後で補完も可
         customer_id: customerId,
         price_id: sub.items.data[0]?.price?.id ?? null,
-        status: event.type === 'customer.subscription.deleted' ? 'canceled' : sub.status,
+        status: event.type === 'customer.subscription.deleted' ? 'canceled' : status,
         current_period_end: sub.items.data[0].current_period_end
           ? new Date(sub.items.data[0].current_period_end * 1000).toISOString()
           : null
