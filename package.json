@@ -64,7 +64,7 @@
     "daisyui": "^5.0.50",
     "playwright": "^1.54.2",
     "storybook": "^9.1.1",
-    "supabase": "^2.34.3",
+    "supabase": "^2.58.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.4"
