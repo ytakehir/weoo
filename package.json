@@ -29,7 +29,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "emoji-picker-react": "^4.13.2",
+    "emoji-picker-react": "^4.16.1",
     "husky": "^9.1.7",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.539.0",
