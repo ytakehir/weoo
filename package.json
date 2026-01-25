@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
-    "@storybook/addon-themes": "^9.1.2",
+    "@storybook/addon-themes": "^10.2.0",
     "@stripe/react-stripe-js": "^3.9.0",
     "@stripe/stripe-js": "^7.8.0",
     "@supabase/ssr": "^0.6.1",
